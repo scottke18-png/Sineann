@@ -4,6 +4,7 @@ import { api, formatApiErrorDetail } from "@/lib/api";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { adminInput, adminBtn, adminBtnGhost, Field } from "@/pages/admin/adminUi";
 import { Pencil, Trash2, Plus } from "lucide-react";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 const EMPTY = {
   name: "", vintage: "", varietal: "", appellation: "", vineyard: "",
@@ -96,14 +97,16 @@ export default function WinesManager() {
                   <option>Estate</option><option>Train Graffiti</option>
                 </select>
               </Field>
-              <Field label="Image URL"><input className={adminInput} value={form.image_url} onChange={(e) => update("image_url", e.target.value)} placeholder="Paste or upload in Media" /></Field>
-              <Field label="Label Image URL"><input className={adminInput} value={form.label_image_url} onChange={(e) => update("label_image_url", e.target.value)} /></Field>
               <Field label="Order"><input type="number" className={adminInput} value={form.order} onChange={(e) => update("order", e.target.value)} /></Field>
               <Field label="Featured">
                 <label className="flex items-center gap-2 mt-2 text-sm cursor-pointer">
                   <input type="checkbox" checked={form.featured} onChange={(e) => update("featured", e.target.checked)} className="accent-wine w-4 h-4" data-testid="wine-form-featured" /> Show on homepage
                 </label>
               </Field>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-6 border-y border-white/10 py-5">
+              <ImageUploader label="Bottle Image (3:4)" testId="wine-bottle" aspect={3 / 4} value={form.image_url} onChange={(url) => update("image_url", url)} />
+              <ImageUploader label="Label Close-up (16:9, optional)" testId="wine-label" aspect={16 / 9} value={form.label_image_url} onChange={(url) => update("label_image_url", url)} />
             </div>
             <Field label="Tasting Notes"><textarea rows={3} className={adminInput} value={form.tasting_notes} onChange={(e) => update("tasting_notes", e.target.value)} /></Field>
             <Field label="Production Notes"><textarea rows={2} className={adminInput} value={form.production_notes} onChange={(e) => update("production_notes", e.target.value)} /></Field>

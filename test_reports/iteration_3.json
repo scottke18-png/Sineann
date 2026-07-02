@@ -1,0 +1,24 @@
+{
+  "summary": "Frontend-only E2E test of the new ImageUploader (drag&drop + react-easy-crop) integration in Wines and News admin forms. All 15 test steps passed with zero console/page errors. Bottle image (3:4) + Label (16:9) dropzones render with 'Drag & drop an image, or click to browse' text and correct data-testids. Setting a file on the hidden file-input opens the crop overlay with zoom slider and Apply & Upload button. Apply & Upload posted to /api/media/upload, returned a backend /api/files/... URL, showed 'Image uploaded.' toast, closed the overlay, and rendered a preview with Replace/Remove controls. Uploaded image loaded (naturalWidth=900, matches 3:4 output). Created a TEST_ wine with the uploaded bottle image, verified it in the list, and deleted it via window.confirm (auto-accepted). Manual URL fallback input works. News tab: Cover Image (16:9) dropzone + crop overlay + zoom slider + apply button all render correctly. No runtime errors across Wines and News flows; existing 6 wines and 3 posts still load.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_3.json"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "ImageUploader.jsx line 78 sets Content-Type: multipart/form-data manually without a boundary — axios normally handles this itself. It happens to still work here (browser/axios overrides with proper boundary for FormData in most cases), and the upload succeeded in testing, but the explicit header is unnecessary and could break in some environments. Safer to omit the header and let axios/browser set it.",
+    "ImageUploader.jsx catch block swallows upload errors with a generic toast — consider surfacing err.response?.data?.detail like other admin pages via formatApiErrorDetail for consistent error UX.",
+    "Manual URL input (data-testid=url-input-*) is only visible when there is no value yet. Once an image is uploaded the input disappears (replaced by preview + Replace/Remove). This matches the review spec, but note the fallback is not available for editing an existing URL without first clicking Remove."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "N/A (frontend only)", "frontend": "100%" },
+  "test_credentials": "admin@sineann.com / Sineann2026! (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "Created and immediately deleted one TEST_UploadWine_* record via the new upload flow. Wines count returned to 6.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "New image upload/crop feature works end-to-end for Wines (bottle 3:4 + label 16:9) and News (cover 16:9). Backend endpoint POST /api/media/upload returns a URL under REACT_APP_BACKEND_URL/api/files/sineann/media/<uuid>.jpg that renders correctly. Use page.set_input_files on the hidden data-testid='file-input-*' element to trigger crop overlay in future tests; wait ~1.2s after opening the overlay before clicking Apply & Upload so onCropComplete has fired.",
+  "rca of the issue": "N/A — no bug found."
+}

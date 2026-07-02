@@ -4,6 +4,7 @@ import { api, formatApiErrorDetail } from "@/lib/api";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { adminInput, adminBtn, adminBtnGhost, Field } from "@/pages/admin/adminUi";
 import { Pencil, Trash2, Plus } from "lucide-react";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 const EMPTY = { title: "", excerpt: "", body: "", cover_image: "", author: "Sineann", published: true };
 
@@ -71,9 +72,9 @@ export default function PostsManager() {
           </DialogHeader>
           <form onSubmit={save} className="space-y-4 mt-2">
             <Field label="Title"><input required className={adminInput} value={form.title} onChange={(e) => update("title", e.target.value)} data-testid="post-form-title" /></Field>
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 gap-4 items-start">
               <Field label="Author"><input className={adminInput} value={form.author} onChange={(e) => update("author", e.target.value)} /></Field>
-              <Field label="Cover Image URL"><input className={adminInput} value={form.cover_image} onChange={(e) => update("cover_image", e.target.value)} /></Field>
+              <ImageUploader label="Cover Image (16:9)" testId="post-cover" aspect={16 / 9} value={form.cover_image} onChange={(url) => update("cover_image", url)} />
             </div>
             <Field label="Excerpt"><textarea rows={2} className={adminInput} value={form.excerpt} onChange={(e) => update("excerpt", e.target.value)} /></Field>
             <Field label="Body (use blank lines between paragraphs)"><textarea rows={8} className={adminInput} value={form.body} onChange={(e) => update("body", e.target.value)} data-testid="post-form-body" /></Field>
