@@ -11,18 +11,22 @@ const TYPES = [
 ];
 
 export default function InquiryForm({ defaultType = "general", subject = "" }) {
-  const [form, setForm] = useState({ type: defaultType, name: "", email: "", phone: "", subject, message: "" });
+  const [form, setForm] = useState({ type: defaultType, name: "", email: "", phone: "", subject, club_preference: "", message: "" });
   const [loading, setLoading] = useState(false);
 
   const update = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
   const submit = async (e) => {
     e.preventDefault();
+    if (form.type === "wineclub" && !form.club_preference) {
+      toast.error("Please choose which club you're interested in.");
+      return;
+    }
     setLoading(true);
     try {
       await api.post("/submissions", form);
       toast.success("Thank you — your inquiry has been received. We'll be in touch shortly.");
-      setForm({ type: defaultType, name: "", email: "", phone: "", subject, message: "" });
+      setForm({ type: defaultType, name: "", email: "", phone: "", subject, club_preference: "", message: "" });
     } catch (err) {
       toast.error(formatApiErrorDetail(err.response?.data?.detail));
     } finally {
@@ -48,6 +52,20 @@ export default function InquiryForm({ defaultType = "general", subject = "" }) {
           </SelectContent>
         </Select>
       </div>
+      {form.type === "wineclub" && (
+        <div data-testid="club-preference-field">
+          <label className="overline block mb-2">Which Club?</label>
+          <Select value={form.club_preference} onValueChange={(v) => update("club_preference", v)}>
+            <SelectTrigger data-testid="club-preference-select" className="bg-transparent border-white/20 text-[#F5F5F0] rounded-none h-12 focus:ring-wine">
+              <SelectValue placeholder="Select a club" />
+            </SelectTrigger>
+            <SelectContent className="bg-[#141414] border-white/10 text-[#F5F5F0]">
+              <SelectItem value="Reds Only" data-testid="club-option-reds">Reds Only</SelectItem>
+              <SelectItem value="All Wines" data-testid="club-option-all">All Wines</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
           <label className="overline block mb-2">Name</label>

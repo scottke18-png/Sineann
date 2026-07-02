@@ -192,6 +192,7 @@ class SubmissionInput(BaseModel):
     email: EmailStr
     phone: Optional[str] = ""
     subject: Optional[str] = ""
+    club_preference: Optional[str] = ""
     message: str
 
 class NewsletterInput(BaseModel):
@@ -351,6 +352,7 @@ async def create_submission(payload: SubmissionInput):
         <p><b>Email:</b> {doc['email']}</p>
         <p><b>Phone:</b> {doc.get('phone','')}</p>
         <p><b>Subject:</b> {doc.get('subject','')}</p>
+        {f"<p><b>Club preference:</b> {doc['club_preference']}</p>" if doc.get('club_preference') else ""}
         <p><b>Message:</b><br/>{doc['message']}</p>
         </td></tr></table>"""
         await send_email(notify, f"Sineann: new {doc['type']} inquiry from {doc['name']}", html)
