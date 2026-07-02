@@ -28,12 +28,8 @@ export default function Story() {
           <p className="overline mb-4">Heritage</p>
           <h2 className="font-heading text-3xl sm:text-4xl font-light text-[#F5F5F0] mb-6">{c.label_history_title || "A light-touch label history"}</h2>
           <p className="text-secondary leading-relaxed max-w-2xl mx-auto mb-8">{c.label_history_body}</p>
-          <div className="grid sm:grid-cols-3 gap-6 mt-12">
-            {[ASSETS.label, ASSETS.wineDetail, ASSETS.graffiti].map((img, i) => (
-              <div key={i} className="aspect-square overflow-hidden border border-white/10">
-                <img src={img} alt="" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-              </div>
-            ))}
+          <div className="mt-12 celtic-weave p-3 border border-white/10">
+            <img src={ASSETS.labelPoster} alt="Sineann label history — every label we've made" className="block w-full h-auto" />
           </div>
           <Link to="/train-series" className="inline-block mt-12 link-underline text-[0.8rem] tracking-[0.16em] uppercase text-[#F5F5F0]">
             See the Train Graffiti Art Series →
