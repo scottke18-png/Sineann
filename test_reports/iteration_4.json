@@ -1,0 +1,24 @@
+{
+  "summary": "Frontend-only regression test of ImageUploader adjustments (larger crop overlay + zoom range 0.4x-3x). All 7 review checks passed with no console/page errors. Cropper container measured 636x648px on a 1920x1080 viewport (height = 648 = exactly 60vh, matching the new 60vh/minHeight:380 spec). Panel width 638px (max-w-3xl). Radix slider on Wines bottle uploader (data-testid='zoom-slider-wine-bottle') reports aria-valuemin=0.4, aria-valuemax=3, aria-valuenow starts at 1. Home key => aria=0.4 and readout '40%' (image visibly shrinks). End key => aria=3 and readout '300%' (image visibly enlarges to fill/overflow cropper). Home + 60 ArrowRight => 100% mid-value. Apply & Upload posted successfully, sonner toast 'Image uploaded.' shown, preview thumbnail with Replace/Remove appeared. Created TEST_ZoomWine, verified in list, deleted via native window.confirm (auto-accepted); wine no longer in list. News tab: Add Post => Cover uploader crop overlay (data-testid='crop-overlay-post-cover') also opens at 636x648, slider goes 40%<->300% correctly. Screenshots confirm the enlarged overlay is dominant on the viewport with both wine-bottle (3:4) and post-cover (16:9) aspect ratios respected.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_4.json"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "ImageUploader.jsx uses restrictPosition={false} together with the new MIN_ZOOM=0.4 - correct choice, as it lets the user pan a shrunken image freely; without it react-easy-crop would snap the image back and effectively re-clamp zoom>=1. Good.",
+    "Zoom range 0.4-3 is generous but note that at 40% the image can be smaller than the crop mask, leaving dark bars in the exported blob (canvas is pre-filled with #0A0A0A on line 25-26). This is intentional/graceful but worth documenting to admins so they know a tiny scale produces letterboxing.",
+    "Slider step=0.01 gives 260 discrete keyboard steps between min and max - fine for mouse dragging but keyboard nudge (ArrowRight = +0.01 = +1%) is slow; consider Radix Slider's PageUp/PageDown or larger step for accessibility. Not blocking."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "N/A (frontend only)", "frontend": "100%" },
+  "test_credentials": "admin@sineann.com / Sineann2026! (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "Created and immediately deleted one TEST_ZoomWine_* record via the upload+save flow. Wines list back to 6 seeded wines.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Radix Slider inside overlay is keyboard-controllable: focus the [role='slider'] thumb inside [data-testid='zoom-slider-wine-bottle'] (or post-cover) then press Home for min (0.4/40%), End for max (3/300%). Read percentage via any <span> inside the crop-overlay that contains '%'. Cropper container is the child div with inline style height:60vh; measure it to verify overlay size. window.confirm auto-accept via page.on('dialog', d => d.accept()) works for wine delete.",
+  "rca of the issue": "N/A - feature verified end-to-end; both original bugs fixed: (1) scale slider now goes below 100% (down to 40%) as required, and (2) crop area is now ~60% of viewport height instead of previous ~360px."
+}

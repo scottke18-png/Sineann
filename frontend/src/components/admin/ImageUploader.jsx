@@ -33,6 +33,8 @@ async function getCroppedBlob(imageSrc, cropPixels, outW, outH) {
 }
 
 export default function ImageUploader({ value, onChange, aspect = 3 / 4, label, testId = "image" }) {
+  const MIN_ZOOM = 0.4;
+  const MAX_ZOOM = 3;
   const [dragging, setDragging] = useState(false);
   const [cropSrc, setCropSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -134,17 +136,21 @@ export default function ImageUploader({ value, onChange, aspect = 3 / 4, label, 
       {/* Crop overlay */}
       {cropSrc && (
         <div className="fixed inset-0 z-[120] bg-black/90 flex items-center justify-center p-4" data-testid={`crop-overlay-${testId}`}>
-          <div className="bg-[#141414] border border-white/10 w-full max-w-lg">
+          <div className="bg-[#141414] border border-white/10 w-full max-w-3xl">
             <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
               <p className="flex items-center gap-2 text-[#F5F5F0] text-sm"><CropIcon size={16} /> Position & resize</p>
               <button type="button" onClick={closeCrop} className="text-[#A8A39D] hover:text-[#F5F5F0]"><X size={18} /></button>
             </div>
-            <div className="relative w-full bg-black" style={{ height: 360 }}>
+            <div className="relative w-full bg-black" style={{ height: "60vh", minHeight: 380 }}>
               <Cropper
                 image={cropSrc}
                 crop={crop}
                 zoom={zoom}
+                minZoom={MIN_ZOOM}
+                maxZoom={MAX_ZOOM}
                 aspect={aspect}
+                restrictPosition={false}
+                zoomSpeed={0.25}
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
                 onCropComplete={onCropComplete}
@@ -154,8 +160,16 @@ export default function ImageUploader({ value, onChange, aspect = 3 / 4, label, 
             </div>
             <div className="px-5 py-4 space-y-4">
               <div>
-                <p className="overline mb-2">Zoom</p>
-                <Slider min={1} max={3} step={0.01} value={[zoom]} onValueChange={(v) => setZoom(v[0])} data-testid={`zoom-slider-${testId}`} />
+                <div className="flex items-center justify-between mb-2">
+                  <p className="overline">Scale</p>
+                  <span className="text-secondary text-xs">{Math.round(zoom * 100)}%</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-secondary text-xs">−</span>
+                  <Slider min={MIN_ZOOM} max={MAX_ZOOM} step={0.01} value={[zoom]} onValueChange={(v) => setZoom(v[0])} data-testid={`zoom-slider-${testId}`} />
+                  <span className="text-secondary text-xs">+</span>
+                </div>
+                <p className="text-[#5a544f] text-[0.65rem] mt-1.5">Drag the slider (or scroll on the image) to make it bigger or smaller. Drag the image to reposition.</p>
               </div>
               <p className="text-secondary text-xs">All images are saved at a uniform {aspect < 1 ? "portrait (3:4)" : "landscape (16:9)"} size so the published page stays consistent.</p>
               <div className="flex gap-3">
