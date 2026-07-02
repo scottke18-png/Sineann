@@ -25,6 +25,12 @@ export default function Home() {
           <div className="absolute inset-0 hero-fade" />
         </div>
         <div className="relative text-center px-6 max-w-4xl">
+          <img
+            src={ASSETS.logoFull}
+            alt="Sineann"
+            data-testid="hero-logo"
+            className="w-40 sm:w-52 lg:w-60 mx-auto mb-8 animate-fade-in drop-shadow-[0_2px_20px_rgba(0,0,0,0.6)]"
+          />
           <p className="overline mb-6 animate-fade-in">{content.hero_overline || "Established 1878 · Estate Grown"}</p>
           <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-light tracking-tight text-[#F5F5F0] leading-[1.05] mb-7 animate-fade-up">
             {content.hero_title || "Wines woven from heritage & craft"}

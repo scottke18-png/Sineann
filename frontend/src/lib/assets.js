@@ -1,5 +1,6 @@
 export const ASSETS = {
-  logo: "https://static.prod-images.emergentagent.com/jobs/867d0ff3-124f-4696-8f78-054541efb08c/images/4feb1b9d537e06de4d2cc7998b0cd375fa81647ea8c55fd12d2aef00440a2d57.png",
+  logo: "/sineann-emblem.png",
+  logoFull: "/sineann-logo.png",
   heroVineyard: "https://images.pexels.com/photos/18248851/pexels-photo-18248851.jpeg",
   heroAlt: "https://images.pexels.com/photos/4070538/pexels-photo-4070538.jpeg",
   cellar: "https://images.unsplash.com/photo-1724082111671-eb2a4c01d40d",
