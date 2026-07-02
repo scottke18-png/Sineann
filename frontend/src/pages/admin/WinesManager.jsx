@@ -99,6 +99,7 @@ export default function WinesManager() {
                 <datalist id="wine-series-options">
                   {seriesOptions.map((s) => <option key={s} value={s} />)}
                 </datalist>
+                <p className="text-[#5a544f] text-[0.65rem] mt-1">Set this to a feature page's "Series Filter" (e.g. Train Graffiti) to show this bottle on the Art Series page.</p>
               </Field>
               <Field label="Order"><input type="number" className={adminInput} value={form.order} onChange={(e) => update("order", e.target.value)} /></Field>
               <Field label="Featured">
