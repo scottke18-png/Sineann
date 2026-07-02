@@ -1,0 +1,90 @@
+{
+  "project_name": "Sineann Winery Website Redesign",
+  "theme": "dark",
+  "archetype": "5 (Luxury)",
+  "emotional_tone": "Established, distinct, crafted, understated elegance, premium.",
+  "design_concept": "Dramatic Opulence meets Earthy Organic. Deep, rich blacks combined with subtle gray-on-black Celtic motifs. Clean, pared-down layouts (inspired by Kerry Hill Winery) but elevated with dark rich premium tones and editorial typography.",
+  "colors": {
+    "background_base": "#0A0A0A",
+    "background_surface": "#141414",
+    "text_primary": "#F5F5F0",
+    "text_secondary": "#A8A39D",
+    "accent_primary": "#5C1522",
+    "accent_hover": "#7D1C2E",
+    "border_subtle": "rgba(255, 255, 255, 0.10)",
+    "celtic_motif_pattern": "rgba(255, 255, 255, 0.03)"
+  },
+  "typography": {
+    "fonts": {
+      "headings": "Cormorant Garamond",
+      "body": "Outfit",
+      "accent": "La Belle Aurore"
+    },
+    "hierarchy": {
+      "h1": "text-5xl sm:text-6xl tracking-tight font-light",
+      "h2": "text-3xl sm:text-4xl tracking-tight",
+      "h3": "text-xl sm:text-2xl",
+      "body": "text-base leading-relaxed font-light",
+      "overline": "text-xs tracking-[0.2em] uppercase font-bold text-secondary"
+    }
+  },
+  "layout_and_spacing": {
+    "spacing_scale": "Generous spacing philosophy. Use p-12, p-16, py-24, py-32 for editorial breathing room.",
+    "grid_system": "Asymmetrical layout for 'Our Story' and 'Featured Wines'. Avoid standard bootstrap columns. Use CSS Grid with wide gaps (gap-12 to gap-16).",
+    "alignment": "Left-align paragraphs and dense content for readability. Center-align hero statements and editorial pull-quotes."
+  },
+  "surface_strategies": {
+    "cards": "Flat background (bg-surface), 1px subtle border (border-white/10), no shadow. Hover: slight lift (-translate-y-1) with border color darkening/lightening.",
+    "celtic_dividers": "1px horizontal border-white/10 with a subtle, geometric Celtic-inspired SVG knot centered. Heritage texture, not theme-park styling.",
+    "glassmorphism": "Used sparingly for sticky headers: backdrop-blur-xl bg-black/60 with 1px border-white/10 bottom edge."
+  },
+  "celtic_influence_guidelines": {
+    "implementation": "Do not use bright green or overt shamrocks. Use soft gray-on-black low-contrast decorative motifs as background tiles (opacity 3%), understated section dividers, and heritage-inspired ornamental framing on 'Our Story' and 'Wine Club' sections."
+  },
+  "components_strategy": {
+    "marketing_pages": "Pure HTML + Tailwind CSS for overlapping, asymmetrical, creative layouts.",
+    "interactive_logic": "Shadcn UI (Input, Select, Form, Dialog) heavily customized to remove the 'Vercel-look'. Match the luxury dark theme.",
+    "admin_cms": "Shadcn UI components (Tables, Cards, Tabs) in a dense, functional layout. 'Control Room' grid.",
+    "javascript_note": "Provide guidelines and implementations tailored for .js and .jsx files, not .tsx.",
+    "testing": "All interactive and key informational elements MUST include a data-testid attribute (e.g., data-testid='inquiry-submit-button')."
+  },
+  "image_urls": [
+    {
+      "category": "hero_vineyard",
+      "url": "https://images.pexels.com/photos/18248851/pexels-photo-18248851.jpeg",
+      "description": "Golden sunset casting warm hues over expansive vineyards."
+    },
+    {
+      "category": "hero_vineyard_alt",
+      "url": "https://images.pexels.com/photos/4070538/pexels-photo-4070538.jpeg",
+      "description": "Vibrant sunset over Santa Maria vineyard."
+    },
+    {
+      "category": "heritage_cellar",
+      "url": "https://images.unsplash.com/photo-1724082111671-eb2a4c01d40d",
+      "description": "A room filled with lots of wooden barrels, for Our Story section."
+    },
+    {
+      "category": "wine_detail",
+      "url": "https://images.unsplash.com/photo-1561461056-77634126673a",
+      "description": "Person pouring red wine into a clear glass, elegant presentation."
+    },
+    {
+      "category": "graffiti_train_series",
+      "url": "https://images.unsplash.com/photo-1648154008739-bd1b8cbb9074",
+      "description": "Train with graffiti painted on the side, used for the Train Graffiti Art Series feature teaser and dedicated page."
+    }
+  ],
+  "pages": {
+    "Home": "Hero with strong winery imagery + concise brand statement; Intro/story section with heritage cues; Featured wines/current releases grid; Current Features section for Train Graffiti Art Series; Visit/appointment CTA; Wine Club preview; latest news posts; contact/purchase inquiry CTA.",
+    "Our Wines": "Listing page, editorial bento grid, rich imagery.",
+    "Wine Detail": "Individual wine detail pages with label close-ups, tasting notes, vintage, appellation, availability. Inquiry CTA.",
+    "How to Buy": "Inquiry-based (contact form only), no e-commerce cart.",
+    "Visit": "Visit page with hours + appointment CTA.",
+    "Our Story": "Light-touch label history, heritage texture, cellar imagery.",
+    "Wine Club": "Informational with two options: Reds Only and All Wines. Inquiry CTA.",
+    "Train Graffiti Art Series": "Dedicated feature page. Blends urban art with premium wine aesthetic.",
+    "Contact & Newsletter": "Contact page with inquiry form (purchase/club/visit/general) and newsletter signup form.",
+    "Admin/CMS": "Dashboard for wines, page content, news posts, media, submissions."
+  }
+}
