@@ -1,0 +1,72 @@
+{
+  "summary": "iOS iPhone (390x844) verification of preemptive fixes applied after iteration_5. All four fixes and mobile regressions PASS. Inputs now compute >=16px on mobile (no iOS auto-zoom), hero uses svh + min-h fallback, title/favicon/viewport-fit meta correct, and no horizontal overflow or console/page errors on /, /wines, /wines/celtic-oak-cabernet-2021, /contact. Contact form submits with success toast. Admin login works on iPhone viewport and dashboard renders wines list.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "verifications": {
+    "fix1_input_font_size_ios_no_zoom": {
+      "inquiry-name": "16px",
+      "inquiry-email": "16px",
+      "inquiry-message": "16px (textarea)",
+      "admin-email-input": "16px",
+      "admin-password-input": "16px",
+      "status": "PASS"
+    },
+    "fix2_hero_svh": {
+      "home_hero_class": "relative h-[100svh] min-h-[640px]",
+      "home_hero_computed_height_px": 844,
+      "home_hero_min_height_computed": "640px",
+      "train_hero_class": "relative h-[70svh] min-h-[520px]",
+      "train_hero_computed_height_px": 590.8,
+      "train_hero_min_height_computed": "520px",
+      "no_overflow_home": true,
+      "no_overflow_train": true,
+      "status": "PASS"
+    },
+    "fix3_branding": {
+      "title": "Sineann Winery | Estate-Grown Wines",
+      "favicon_href": "/sineann-emblem.png",
+      "apple_touch_icon_href": "/sineann-emblem.png",
+      "favicon_http_status": 200,
+      "status": "PASS"
+    },
+    "fix4_viewport_fit_cover": {
+      "viewport_meta": "width=device-width, initial-scale=1, viewport-fit=cover",
+      "status": "PASS"
+    },
+    "regression_iphone_390x844": {
+      "home_overflow": {"scrollWidth": 390, "clientWidth": 390},
+      "wines_overflow": {"scrollWidth": 390, "clientWidth": 390},
+      "wine_detail_overflow": {"scrollWidth": 390, "clientWidth": 390},
+      "contact_overflow": {"scrollWidth": 390, "clientWidth": 390},
+      "console_errors": [],
+      "page_errors": [],
+      "mobile_menu_toggle_opens": true,
+      "nav_link_wines_worked": true,
+      "contact_form_submit_success_toast": true,
+      "status": "PASS"
+    },
+    "admin_on_iphone": {
+      "login_url_after_submit": "/admin",
+      "dashboard_renders_wines": true,
+      "status": "PASS"
+    }
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "index.css @media (max-width:640px) input,textarea,select { font-size:16px !important } is a clean, targeted fix and does not affect desktop.",
+    "h-[100svh] and h-[70svh] with min-h fallback are correctly applied and gracefully degrade on browsers without svh support.",
+    "Consider adding data-testid to Home and TrainSeries hero <section> elements for cleaner future targeting (currently had to select by class fragment)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (frontend-only test)", "frontend": "100%"},
+  "test_credentials": "admin@sineann.com / Sineann2026! (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All iPhone (390x844) fixes from iteration_6 are verified. Fix #1 (16px inputs), Fix #2 (svh hero heights with min-h fallback), Fix #3 (branding: Sineann title + favicon), Fix #4 (viewport-fit=cover) all confirmed. No horizontal overflow, no console/page errors on any tested route. Contact form + admin login both work on iPhone viewport."
+}

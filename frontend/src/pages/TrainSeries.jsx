@@ -17,7 +17,7 @@ export default function TrainSeries() {
   return (
     <div data-testid="train-series-page">
       {/* HERO */}
-      <section className="relative h-[70vh] min-h-[520px] flex items-center justify-center">
+      <section className="relative h-[70svh] min-h-[520px] flex items-center justify-center">
         <div className="absolute inset-0">
           <img src={ASSETS.graffiti} alt="Train Graffiti Art Series" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/60" />

@@ -99,6 +99,13 @@ body {
 ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 0; }
 ::-webkit-scrollbar-thumb:hover { background: #5C1522; }
 
+/* Prevent iOS Safari from auto-zooming into form fields on focus (inputs must be >=16px) */
+@media (max-width: 640px) {
+    input, textarea, select {
+        font-size: 16px !important;
+    }
+}
+
 @layer base {
     [data-debug-wrapper="true"] { display: contents !important; }
 }

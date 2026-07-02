@@ -19,7 +19,7 @@ export default function Home() {
   return (
     <div data-testid="home-page">
       {/* HERO */}
-      <section className="relative h-screen min-h-[640px] flex items-center justify-center">
+      <section className="relative h-[100svh] min-h-[640px] flex items-center justify-center">
         <div className="absolute inset-0">
           <img src={ASSETS.heroVineyard} alt="Sineann vineyard" className="w-full h-full object-cover" />
           <div className="absolute inset-0 hero-fade" />
