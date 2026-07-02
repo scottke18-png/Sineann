@@ -18,17 +18,17 @@ export default function TrainSeries() {
   return (
     <div data-testid="train-series-page">
       {/* HERO */}
-      <section className="relative h-[70svh] min-h-[520px] flex items-center justify-center">
-        <div className="absolute inset-0">
-          <img src={c.hero_image || ASSETS.graffiti} alt={c.title || "Art Series"} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-black/60" />
-        </div>
-        <div className="relative text-center px-6 max-w-3xl">
-          <p className="overline mb-5 text-wine">{c.overline || "Current Feature"}</p>
-          <h1 className="font-heading text-5xl sm:text-6xl lg:text-7xl font-light text-[#F5F5F0] mb-6 leading-[1.05]">
-            {c.title || "The Train Graffiti Art Series"}
-          </h1>
-          <p className="text-secondary text-lg font-light">{c.subtitle || "Railway street art meets estate winemaking"}</p>
+      <section className="relative h-[70svh] min-h-[520px] overflow-hidden">
+        <img src={c.hero_image || ASSETS.graffiti} alt={c.title || "Art Series"} className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_115%_95%_at_0%_100%,rgba(10,10,10,0.96)_0%,rgba(10,10,10,0.78)_22%,rgba(10,10,10,0.35)_42%,rgba(10,10,10,0)_62%)]" />
+        <div className="relative h-full flex items-end">
+          <div className="px-6 sm:px-10 lg:px-16 pb-12 sm:pb-16 max-w-2xl text-left">
+            <p className="overline mb-4 text-wine">{c.overline || "Current Feature"}</p>
+            <h1 className="font-heading text-4xl sm:text-6xl lg:text-7xl font-light text-[#F5F5F0] mb-4 leading-[1.03]">
+              {c.title || "The Train Graffiti Art Series"}
+            </h1>
+            <p className="text-secondary text-base sm:text-lg font-light">{c.subtitle || "Railway street art meets estate winemaking"}</p>
+          </div>
         </div>
       </section>
 
