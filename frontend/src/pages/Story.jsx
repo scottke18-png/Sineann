@@ -17,7 +17,7 @@ export default function Story() {
             ))}
           </div>
           <div className="order-1 lg:order-2 relative celtic-weave p-3 border border-white/10">
-            <img src={ASSETS.cellar} alt="Cellar" className="w-full aspect-[4/5] object-cover" />
+            <img src={ASSETS.winemaker} alt="Sineann winemaker" className="w-full aspect-[4/5] object-cover object-top" />
           </div>
         </div>
       </section>
