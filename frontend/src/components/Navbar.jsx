@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { ASSETS } from "@/lib/assets";
+import { api } from "@/lib/api";
 
 const NAV = [
   { to: "/wines", label: "Our Wines" },
@@ -15,7 +16,17 @@ const NAV = [
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [navLabels, setNavLabels] = useState({});
   const location = useLocation();
+
+  useEffect(() => {
+    api.get("/pages/train").then((r) => {
+      const label = r.data?.content?.nav_label;
+      if (label) setNavLabels((n) => ({ ...n, "/train-series": label }));
+    }).catch(() => {});
+  }, []);
+
+  const labelFor = (item) => navLabels[item.to] || item.label;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
@@ -54,7 +65,7 @@ export const Navbar = () => {
                 }`
               }
             >
-              {item.label}
+              {labelFor(item)}
             </NavLink>
           ))}
           <Link
@@ -85,7 +96,7 @@ export const Navbar = () => {
                 to={item.to}
                 className="text-[#A8A39D] hover:text-[#F5F5F0] text-sm tracking-[0.14em] uppercase"
               >
-                {item.label}
+                {labelFor(item)}
               </Link>
             ))}
             <Link to="/contact" className="text-wine hover:text-wine-hover text-sm tracking-[0.14em] uppercase">

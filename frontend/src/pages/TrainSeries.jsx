@@ -11,15 +11,16 @@ export default function TrainSeries() {
   const [wines, setWines] = useState([]);
 
   useEffect(() => {
-    api.get("/wines", { params: { series: "Train Graffiti" } }).then((r) => setWines(r.data)).catch(() => {});
-  }, []);
+    const series = c.series_filter || "Train Graffiti";
+    api.get("/wines", { params: { series } }).then((r) => setWines(r.data)).catch(() => {});
+  }, [c.series_filter]);
 
   return (
     <div data-testid="train-series-page">
       {/* HERO */}
       <section className="relative h-[70svh] min-h-[520px] flex items-center justify-center">
         <div className="absolute inset-0">
-          <img src={ASSETS.graffiti} alt="Train Graffiti Art Series" className="w-full h-full object-cover" />
+          <img src={c.hero_image || ASSETS.graffiti} alt={c.title || "Art Series"} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/60" />
         </div>
         <div className="relative text-center px-6 max-w-3xl">

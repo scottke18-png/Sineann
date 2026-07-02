@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { api, formatApiErrorDetail } from "@/lib/api";
 import { adminInput, adminBtn, Field } from "@/pages/admin/adminUi";
+import ImageUploader from "@/components/admin/ImageUploader";
 
 const LABELS = {
   home: "Homepage", story: "Our Story", visit: "Visit", wineclub: "Wine Club",
-  howtobuy: "How to Buy", train: "Train Graffiti Series", contact: "Contact",
+  howtobuy: "How to Buy", train: "Art Series Page", contact: "Contact",
 };
 
 export default function PagesManager() {
@@ -55,10 +56,18 @@ export default function PagesManager() {
         <div className="md:col-span-3 space-y-4">
           {active && Object.keys(content).map((k) => (
             <Field key={k} label={fieldLabel(k)}>
-              {(content[k] || "").length > 60 || k.includes("body") || k.includes("benefits") || k.includes("hours") ? (
+              {k.endsWith("image") ? (
+                <ImageUploader testId={`page-${k}`} aspect={16 / 9} value={content[k]} onChange={(url) => update(k, url)} />
+              ) : /body|benefits|hours|address|notes/.test(k) ? (
                 <textarea rows={3} className={adminInput} value={content[k]} onChange={(e) => update(k, e.target.value)} data-testid={`page-field-${k}`} />
               ) : (
                 <input className={adminInput} value={content[k]} onChange={(e) => update(k, e.target.value)} data-testid={`page-field-${k}`} />
+              )}
+              {k.endsWith("_filter") && (
+                <p className="text-[#5a544f] text-[0.65rem] mt-1">Wines are shown here when their "Series" (set in the Wines tab) matches this exact value.</p>
+              )}
+              {k === "nav_label" && (
+                <p className="text-[#5a544f] text-[0.65rem] mt-1">The text shown for this page in the top navigation menu.</p>
               )}
             </Field>
           ))}

@@ -22,6 +22,8 @@ export default function WinesManager() {
   const load = () => api.get("/wines").then((r) => setWines(r.data)).catch(() => {});
   useEffect(() => { load(); }, []);
 
+  const seriesOptions = Array.from(new Set(["Estate", "Train Graffiti", ...wines.map((w) => w.series).filter(Boolean)]));
+
   const openNew = () => { setEditing(null); setForm(EMPTY); setOpen(true); };
   const openEdit = (w) => { setEditing(w); setForm({ ...EMPTY, ...w }); setOpen(true); };
   const update = (k, v) => setForm((f) => ({ ...f, [k]: v }));
@@ -93,9 +95,10 @@ export default function WinesManager() {
                 </select>
               </Field>
               <Field label="Series">
-                <select className={adminInput} value={form.series} onChange={(e) => update("series", e.target.value)}>
-                  <option>Estate</option><option>Train Graffiti</option>
-                </select>
+                <input list="wine-series-options" className={adminInput} value={form.series} onChange={(e) => update("series", e.target.value)} placeholder="e.g. Estate, Train Graffiti" data-testid="wine-form-series" />
+                <datalist id="wine-series-options">
+                  {seriesOptions.map((s) => <option key={s} value={s} />)}
+                </datalist>
               </Field>
               <Field label="Order"><input type="number" className={adminInput} value={form.order} onChange={(e) => update("order", e.target.value)} /></Field>
               <Field label="Featured">

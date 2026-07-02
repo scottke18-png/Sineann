@@ -551,9 +551,12 @@ SEED_PAGES = {
         "body": "We sell our wines directly through personal inquiry rather than a checkout cart. Tell us what you're after — a specific bottle, a case, or a gift — and we'll be in touch to arrange it.",
     },
     "train": {
+        "nav_label": "Art Series",
         "overline": "Current Feature",
         "title": "The Train Graffiti Art Series",
         "subtitle": "Railway street art meets estate winemaking",
+        "hero_image": "https://images.unsplash.com/photo-1648154008739-bd1b8cbb9074",
+        "series_filter": "Train Graffiti",
         "body": "The Train Graffiti Art Series is a current, expressive line within the broader Sineann story. Each release pairs bold, original label artwork — created under signed permission from the artists — with approachable, generous wines made to be shared.\n\nIt's a celebration of label art as part of our creative history: current and interesting, but never louder than the winery itself.",
     },
     "contact": {

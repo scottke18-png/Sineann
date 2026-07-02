@@ -4,8 +4,6 @@ import { ASSETS } from "@/lib/assets";
 import { PageHeader } from "@/components/PageHeader";
 import { WineCard } from "@/components/WineCard";
 
-const FILTERS = ["All", "Estate", "Train Graffiti"];
-
 export default function Wines() {
   const [wines, setWines] = useState([]);
   const [filter, setFilter] = useState("All");
@@ -14,6 +12,7 @@ export default function Wines() {
     api.get("/wines").then((r) => setWines(r.data)).catch(() => {});
   }, []);
 
+  const filters = ["All", ...Array.from(new Set(wines.map((w) => w.series).filter(Boolean)))];
   const shown = filter === "All" ? wines : wines.filter((w) => w.series === filter);
 
   return (
@@ -27,16 +26,16 @@ export default function Wines() {
       <section className="px-6 pb-28">
         <div className="max-w-[1300px] mx-auto">
           <div className="flex justify-center gap-3 mb-14 flex-wrap">
-            {FILTERS.map((f) => (
+            {filters.map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                data-testid={`wine-filter-${f.replace(" ", "-")}`}
+                data-testid={`wine-filter-${f.replace(/\s+/g, "-")}`}
                 className={`px-6 py-2.5 text-[0.75rem] tracking-[0.16em] uppercase border transition-all ${
                   filter === f ? "bg-wine border-wine text-[#F5F5F0]" : "border-white/20 text-[#A8A39D] hover:text-[#F5F5F0] hover:border-white/50"
                 }`}
               >
-                {f === "Train Graffiti" ? "Art Series" : f}
+                {f}
               </button>
             ))}
           </div>
