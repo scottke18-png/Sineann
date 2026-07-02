@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { api, formatApiErrorDetail } from "@/lib/api";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { adminInput, adminBtn, adminBtnGhost, Field } from "@/pages/admin/adminUi";
 import { Pencil, Trash2, Plus } from "lucide-react";
 
@@ -65,7 +65,10 @@ export default function PostsManager() {
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="bg-[#141414] border-white/10 text-[#F5F5F0] max-w-2xl max-h-[90vh] overflow-y-auto rounded-none">
-          <DialogHeader><DialogTitle className="font-heading text-2xl font-light">{editing ? "Edit Post" : "New Post"}</DialogTitle></DialogHeader>
+          <DialogHeader>
+            <DialogTitle className="font-heading text-2xl font-light">{editing ? "Edit Post" : "New Post"}</DialogTitle>
+            <DialogDescription className="text-secondary text-sm">Write and manage newsletter / news posts.</DialogDescription>
+          </DialogHeader>
           <form onSubmit={save} className="space-y-4 mt-2">
             <Field label="Title"><input required className={adminInput} value={form.title} onChange={(e) => update("title", e.target.value)} data-testid="post-form-title" /></Field>
             <div className="grid sm:grid-cols-2 gap-4">

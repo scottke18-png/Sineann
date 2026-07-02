@@ -275,7 +275,7 @@ async def delete_wine(wine_id: str, current=Depends(get_current_user)):
 
 # ---------------- Posts ----------------
 @api_router.get("/posts")
-async def list_posts(all: Optional[bool] = False, current_present: bool = False):
+async def list_posts(all: Optional[bool] = False):
     q = {} if all else {"published": True}
     posts = await db.posts.find(q, {"_id": 0}).sort("published_at", -1).to_list(500)
     return posts
