@@ -1,0 +1,43 @@
+{
+  "summary": "Executed full backend + frontend end-to-end testing for Sineann Winery. Backend pytest suite: 27/27 passed covering auth, wines CRUD (create/get/update/delete + slug/series/featured filters), posts CRUD, pages CRUD, submissions (public POST + admin list/mark/delete), newsletter (signup + dedupe), media upload/list/download and file serving via /api/files/{path}. Frontend Playwright: 17/17 flows passed covering homepage hero + featured wines + Train teaser, wines listing with All/Estate/Art Series filters, wine detail with inquiry form submit + success toast, news list + detail, Train Graffiti page, contact inquiry submit (success toast 'Thank you — your inquiry has been received'), newsletter footer signup, static pages (wine-club/visit/how-to-buy/our-story), protected /admin redirect to /admin/login, admin login success, all 6 admin tabs visible, admin wines create+delete via UI (verified TEST wine appears then removed), Submissions/Newsletter/Media tabs load. No blocking issues found.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/auth/login", "issue": "Sets cookie with SameSite=None; Secure — works on HTTPS preview but cookie also lands on the shared session. Not a bug (dual auth: Bearer+cookie supported), but tests must use fresh requests calls (not session) when asserting 401 for unauthenticated endpoints. Fixed in test file."},
+      {"endpoint": "/api/media/upload", "issue": "Uses os.environ.get('FRONTEND_URL', '') to build public URL. If FRONTEND_URL env var were missing the URL would render as bare '/api/files/...'. Currently configured correctly."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Admin dialogs (WinesManager / PostsManager)", "issues": ["Console warning: 'Missing Description or aria-describedby={undefined} for {DialogContent}' — a11y improvement, not blocking. Add DialogDescription or aria-describedby to Radix DialogContent."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "(Optional a11y) Add DialogDescription to admin modals to remove Radix a11y console warnings",
+    "No functional fixes required — all specified features pass end-to-end"
+  ],
+  "critical_code_review_comments": [
+    "server.py is ~610 lines with routes + models + seeds + storage helpers in one file. Consider splitting into modules (routes/, models/, seed/, storage/) as the app grows.",
+    "list_posts has an unused query param `current_present: bool` — likely leftover / dead parameter, should be removed.",
+    "MIME_TYPES dict is only used for uploads; consider using python-mimetypes lib for broader coverage (pdf, svg etc.).",
+    "Frontend AuthContext stores JWT in localStorage under 'sineann_token' — backend already sets an httpOnly Secure cookie on login. If localStorage is only used because cookies can't be read by JS, consider migrating admin API calls to rely on the cookie only (defense-in-depth against XSS token theft).",
+    "The delete-wine confirm dialog is a native window.confirm (dialog handler required in tests). Consider using a shadcn AlertDialog for consistency with rest of admin UI.",
+    "Backend uses @app.on_event('startup'/'shutdown') which are deprecated in FastAPI in favor of lifespan handlers; still works but should be migrated."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py (new)"
+  ],
+  "success_rate": {"backend": "100% (27/27)", "frontend": "100% (17/17)"},
+  "test_credentials": "admin@sineann.com / Sineann2026! (from /app/memory/test_credentials.md) — verified working",
+  "seed_data_creation": "Backend auto-seeds 6 wines, 3 posts, and 7 page keys on startup; verified via /api/wines and /api/posts. Tests created + deleted their own TEST_* wines / posts / submissions.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend session-cookie behavior: /api/auth/login sets httpOnly SameSite=None cookie AND returns Bearer token. When writing tests, use bare `requests.get(...)` (no session) to assert 401 for unauthenticated protected endpoints; a shared requests.Session that has logged in will carry the cookie and appear authenticated. Frontend form inputs in InquiryForm.jsx use data-testid (inquiry-name, inquiry-email, inquiry-message, inquiry-submit-button) but NOT html name attributes — always select via data-testid. Admin wine row testid format: wine-row-{slugified-name} without vintage suffix in some cases (uses slugify applied to name only, appended vintage). To create a wine via UI, click [data-testid='add-wine-btn'], fill required Name field, click [data-testid='wine-form-save'].",
+  "rca of the issue": "N/A — no bugs found. Initial Contact form test failure was a test-authoring issue (used input[name='name']) fixed by selecting via data-testid inquiry-name."
+}
