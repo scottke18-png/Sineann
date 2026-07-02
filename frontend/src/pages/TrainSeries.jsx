@@ -34,7 +34,7 @@ export default function TrainSeries() {
 
       {/* STORY */}
       <section className="py-24 px-6 celtic-bg">
-        <div className="max-w-[900px] mx-auto text-center">
+        <div className="max-w-[900px] mx-auto text-left">
           <CelticDivider className="mb-10" />
           {(c.body || "").split("\n\n").map((p, i) => (
             <p key={i} className="text-secondary text-lg leading-relaxed mb-6 font-light">{p}</p>
