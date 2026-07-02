@@ -532,7 +532,8 @@ SEED_PAGES = {
         "title": "Sit with us a while",
         "body": "Our tasting room welcomes guests by appointment and on select weekends. Come taste current releases, walk the estate, and hear the stories behind the labels.",
         "hours": "Fri – Sun · 11am – 5pm\nWeekday visits by appointment",
-        "address": "12 Vineyard Lane, Willamette Valley, OR",
+        "address": "8400 Champoeg Rd.\nSt Paul, OR 97137",
+        "phone": "(503) 341-2698",
     },
     "wineclub": {
         "overline": "Wine Club",
@@ -560,7 +561,7 @@ SEED_PAGES = {
         "title": "Start a conversation",
         "body": "Whether you're inquiring about a purchase, the Wine Club, or planning a visit, we'd love to hear from you.",
         "email": "hello@sineann.com",
-        "phone": "(503) 555-0178",
+        "phone": "(503) 341-2698",
     },
 }
 

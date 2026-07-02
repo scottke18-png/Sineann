@@ -13,8 +13,8 @@ export default function Contact() {
         <div className="max-w-[1100px] mx-auto grid lg:grid-cols-5 gap-14">
           <div className="lg:col-span-2 space-y-6">
             <ContactRow icon={Mail} label="Email" value={c.email || "hello@sineann.com"} />
-            <ContactRow icon={Phone} label="Phone" value={c.phone || "(503) 555-0178"} />
-            <ContactRow icon={MapPin} label="Tasting Room" value={"12 Vineyard Lane\nWillamette Valley, OR"} />
+            <ContactRow icon={Phone} label="Phone" value={c.phone || "(503) 341-2698"} />
+            <ContactRow icon={MapPin} label="Tasting Room" value={"8400 Champoeg Rd.\nSt Paul, OR 97137"} />
             <div className="border border-white/10 overflow-hidden aspect-[4/3] celtic-weave p-2">
               <img src={ASSETS.heroVineyard} alt="Estate" className="w-full h-full object-cover" />
             </div>

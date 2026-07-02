@@ -73,8 +73,8 @@ export const Footer = () => {
           <div>
             <p className="overline mb-4">Tasting Room</p>
             <p className="text-secondary text-sm leading-relaxed">
-              12 Vineyard Lane<br />Willamette Valley, OR<br /><br />
-              Fri–Sun · 11am–5pm<br />(503) 555-0178
+              8400 Champoeg Rd.<br />St Paul, OR 97137<br /><br />
+              Fri–Sun · 11am–5pm<br />(503) 341-2698
             </p>
           </div>
         </div>
