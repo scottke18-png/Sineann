@@ -1,0 +1,64 @@
+{
+  "summary": "DIAGNOSTIC iPhone-emulation run (Chromium emulation @ 390x844 viewport, iOS UA). Tested 10 public pages + full mobile flows (nav, contact form submission, admin login + Add Wine dialog + image crop overlay). RESULT: Zero JavaScript errors, zero console warnings, zero uncaught page errors, zero React/CRA dev overlays on ANY page or during ANY interaction. No horizontal overflow on any page (document.scrollWidth === document.clientWidth === 390 on all 10 pages). Every interactive flow (mobile menu, contact submit with toast, admin login, add wine dialog, crop overlay + Apply & Upload button) is fully reachable and works. Given the site-owner report of 'a lot of errors on iPhone', I could NOT reproduce any of them under emulated iPhone; the issue is almost certainly (a) a stale cached build on the owner's device, or (b) real-Safari-specific behavior (100vh URL-bar jump, iOS auto-zoom on <16px inputs) that Chromium emulation does not fully replicate. See action_items for iOS-Safari-specific improvements worth applying preemptively.",
+  "backend_issues": { "critical": [], "minor": [] },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      { "screen": "Home hero (iOS Safari specific — NOT reproduced here, but likely source of complaint)",
+        "issues": [
+          "Hero uses h-screen (=100vh). On real iOS Safari, 100vh includes the collapsing URL bar area, so the hero jumps by ~60-90px when the user scrolls and the URL bar hides. Consider min-h-[100svh] (small viewport height) or 100dvh (dynamic viewport height) fallback to remove the jump."
+        ]
+      },
+      { "screen": "Contact form inputs on iOS (NOT reproduced here, but iOS Safari behavior)",
+        "issues": [
+          "InquiryForm text inputs and textarea appear to inherit a font-size below 16px. iOS Safari auto-zooms into any input < 16px, which can look like 'the page is broken / zoomed weird'. Bump form input font-size to >=16px on mobile to prevent auto-zoom."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_5.json",
+    "/app/test_reports/mobile/iphone_probe.json"
+  ],
+  "action_items": [
+    "OWNER-ACTION: Ask the site owner to (a) force-refresh Safari (Settings → Safari → Clear History and Website Data), (b) confirm the URL they visit is exactly https://vineyard-heritage-1.preview.emergentagent.com, and (c) send a screenshot of the actual 'errors' they see (native iOS dialog vs on-page text vs Safari 'A problem repeatedly occurred'). Without a specific error string this is a phantom bug from our side.",
+    "PREEMPTIVE FIX #1 — iOS 100vh jump: In /app/frontend/src/pages/Home.jsx, change the hero section from `h-screen min-h-[640px]` to `min-h-[100svh] min-h-[640px]` (or `h-[100dvh]`). Tailwind v3.4+ supports svh/dvh. This removes the ~80px URL-bar-collapse content shift that many users perceive as 'broken'.",
+    "PREEMPTIVE FIX #2 — iOS input zoom: In InquiryForm and admin login inputs, set font-size to at least 16px on mobile (e.g. add `text-base` = 16px; current inputs may inherit `text-sm` = 14px which triggers Safari auto-zoom-in on focus). Same applies to the admin login form.",
+    "PREEMPTIVE FIX #3 (minor): Add data-testid='cancel-crop-wine-bottle' (and equivalent on post-cover uploader) to the CANCEL button in ImageUploader.jsx crop overlay. It is currently only findable by text, which is a small test-brittleness issue.",
+    "PREEMPTIVE FIX #4 (minor): Update /app/frontend/public/index.html <meta viewport> to include `viewport-fit=cover` so notched iPhones render edge-to-edge correctly with safe-area insets. Current tag `width=device-width, initial-scale=1` is fine but not notch-aware.",
+    "NON-FIX (informational): Add SEO title/description — the <title> is still the default 'Emergent | Fullstack App' on every page, not 'Sineann Winery'. Doesn't cause mobile errors, but shows up in Safari tab UI."
+  ],
+  "critical_code_review_comments": [
+    "Home.jsx line 22: `h-screen min-h-[640px]` — on iOS this causes the classic 100vh-URL-bar hero jump. Prefer svh/dvh. This is the #1 likely explanation for the owner's mobile perception.",
+    "InquiryForm.jsx: verify all mobile input font-size >=16px. Failing to do so causes Safari to zoom into the input on focus, which USERS often report as 'the page is broken / weird / errors'.",
+    "index.html: <title> is 'Emergent | Fullstack App' — not branded. Also viewport meta lacks viewport-fit=cover.",
+    "ImageUploader.jsx CANCEL button has no data-testid (Apply does). Add for test parity.",
+    "Navbar.jsx breakpoint (`lg:hidden` on hamburger, `hidden lg:flex` on desktop nav) is CORRECT and works — hamburger appears at <1024px including all iPhone widths. No issue here."
+  ],
+  "updated_files": [],
+  "success_rate": { "backend": "N/A (frontend-only diagnostic)", "frontend": "100%" },
+  "test_credentials": "admin@sineann.com / Sineann2026! (verified working — /admin/login → /admin redirect with 'Welcome back.' toast on iPhone viewport)",
+  "seed_data_creation": "One inquiry created via /contact form submission on iPhone viewport (Name: 'iPhone Test', Email: 'iphone@test.com', Subject: 'Mobile diagnostic'). Toast confirmed: \"Thank you — your inquiry has been received. We'll be in touch shortly.\" No wine created (crop overlay verified but Apply not invoked to keep DB clean).",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "detailed_page_findings": {
+    "/": "scrollW=clientW=390, doc_h=8778, no overflow, no console err, no page err, no dev overlay",
+    "/wines": "scrollW=clientW=390, doc_h=5897, clean",
+    "/wines/celtic-oak-cabernet-2021": "scrollW=clientW=390, doc_h=4135, clean",
+    "/story": "scrollW=clientW=390, doc_h=4259, clean",
+    "/visit": "scrollW=clientW=390, doc_h=3313, clean",
+    "/wine-club": "scrollW=clientW=390, doc_h=3776, clean",
+    "/how-to-buy": "scrollW=clientW=390, doc_h=3536, clean",
+    "/train-series": "scrollW=clientW=390, doc_h=4403, clean",
+    "/news": "scrollW=clientW=390, doc_h=3289, clean",
+    "/contact": "scrollW=clientW=390, doc_h=3368, clean; form submit returns success toast",
+    "mobile_nav": "hamburger display:block, desktop nav display:none, menu opens on tap, /wines link navigates correctly",
+    "hero_home": "height=844 = viewport (ratio 1.00 under Chromium emulation) — on REAL iOS Safari this becomes ~100vh which shifts when URL bar collapses; not reproducible under Chromium emulation",
+    "admin_login": "Login succeeded on iPhone viewport, redirected to /admin, 'Welcome back.' toast shown",
+    "add_wine_dialog": "Dialog 390x760 within 390x844 viewport, top=42, bottom=802, scrollH=1619 (internally scrollable) — fits and is fully usable on iPhone",
+    "crop_overlay_wine_bottle": "Overlay 388x758 (nearly full-screen), panel 356x767, Apply & Upload button at top=749 bottom=789 — VISIBLE inside 844px viewport, reachable without scrolling. Cancel button also visible in screenshot but lacks data-testid"
+  },
+  "context_for_next_testing_agent": "Chromium-based Playwright emulation of iPhone 13 (390x844 viewport, iOS UA) reproduces ZERO of the errors the site owner reported. The most likely real-world causes are (a) iOS Safari 100vh URL-bar jump on the h-screen hero and/or (b) iOS Safari auto-zoom into <16px inputs. Neither shows up as an actual JS/console error, so the owner is probably describing visual/UX glitches as 'errors'. If a re-test after main-agent fixes is needed, use the same script structure: `page.set_viewport_size({width:390,height:844})` + goto each page + assert `document.scrollWidth === document.clientWidth` + click `[data-testid='mobile-menu-toggle']` + submit InquiryForm with testids `inquiry-name`/`inquiry-email`/`inquiry-subject`/`inquiry-message`/`inquiry-submit-button` + login with `admin-email-input`/`admin-password-input`/`admin-login-submit`. Detailed metrics saved to /app/test_reports/mobile/iphone_probe.json.",
+  "rca of the issue": "NO reproducible errors on emulated iPhone. The site is functionally clean at 390x844. If the owner's report is real, it is one of: (1) stale cached JS on their device (recommend hard clear), (2) iOS-Safari-only 100vh hero jump (fix: use svh/dvh), (3) iOS-Safari auto-zoom on <16px form inputs (fix: enforce 16px+ inputs on mobile), (4) they visited a different/older URL. Cannot RCA further without an exact error string or screenshot from the owner's device."
+}

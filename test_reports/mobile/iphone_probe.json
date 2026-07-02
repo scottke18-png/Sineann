@@ -1,0 +1,182 @@
+{
+  "/": {
+    "url": "/",
+    "metrics": {
+      "title": "Emergent | Fullstack App",
+      "overlay_present": false,
+      "overlay_text": null,
+      "scrollW": 390,
+      "clientW": 390,
+      "bodyW": 390,
+      "overflow_x": false,
+      "overflow_by": 0,
+      "widest": [],
+      "viewport_h": 844,
+      "doc_h": 8778
+    },
+    "console_warn_err": [],
+    "page_errors": []
+  },
+  "/wines": {
+    "url": "/wines",
+    "metrics": {
+      "title": "Emergent | Fullstack App",
+      "overlay_present": false,
+      "overlay_text": null,
+      "scrollW": 390,
+      "clientW": 390,
+      "bodyW": 390,
+      "overflow_x": false,
+      "overflow_by": 0,
+      "widest": [],
+      "viewport_h": 844,
+      "doc_h": 5897
+    },
+    "console_warn_err": [],
+    "page_errors": []
+  },
+  "/wines/celtic-oak-cabernet-2021": {
+    "url": "/wines/celtic-oak-cabernet-2021",
+    "metrics": {
+      "title": "Emergent | Fullstack App",
+      "overlay_present": false,
+      "overlay_text": null,
+      "scrollW": 390,
+      "clientW": 390,
+      "bodyW": 390,
+      "overflow_x": false,
+      "overflow_by": 0,
+      "widest": [],
+      "viewport_h": 844,
+      "doc_h": 4135
+    },
+    "console_warn_err": [],
+    "page_errors": []
+  },
+  "/story": {
+    "url": "/story",
+    "metrics": {
+      "title": "Emergent | Fullstack App",
+      "overlay_present": false,
+      "overlay_text": null,
+      "scrollW": 390,
+      "clientW": 390,
+      "bodyW": 390,
+      "overflow_x": false,
+      "overflow_by": 0,
+      "widest": [],
+      "viewport_h": 844,
+      "doc_h": 4259
+    },
+    "console_warn_err": [],
+    "page_errors": []
+  },
+  "/visit": {
+    "url": "/visit",
+    "metrics": {
+      "title": "Emergent | Fullstack App",
+      "overlay_present": false,
+      "overlay_text": null,
+      "scrollW": 390,
+      "clientW": 390,
+      "bodyW": 390,
+      "overflow_x": false,
+      "overflow_by": 0,
+      "widest": [],
+      "viewport_h": 844,
+      "doc_h": 3313
+    },
+    "console_warn_err": [],
+    "page_errors": []
+  },
+  "/wine-club": {
+    "url": "/wine-club",
+    "metrics": {
+      "title": "Emergent | Fullstack App",
+      "overlay_present": false,
+      "overlay_text": null,
+      "scrollW": 390,
+      "clientW": 390,
+      "bodyW": 390,
+      "overflow_x": false,
+      "overflow_by": 0,
+      "widest": [],
+      "viewport_h": 844,
+      "doc_h": 3776
+    },
+    "console_warn_err": [],
+    "page_errors": []
+  },
+  "/how-to-buy": {
+    "url": "/how-to-buy",
+    "metrics": {
+      "title": "Emergent | Fullstack App",
+      "overlay_present": false,
+      "overlay_text": null,
+      "scrollW": 390,
+      "clientW": 390,
+      "bodyW": 390,
+      "overflow_x": false,
+      "overflow_by": 0,
+      "widest": [],
+      "viewport_h": 844,
+      "doc_h": 3536
+    },
+    "console_warn_err": [],
+    "page_errors": []
+  },
+  "/train-series": {
+    "url": "/train-series",
+    "metrics": {
+      "title": "Emergent | Fullstack App",
+      "overlay_present": false,
+      "overlay_text": null,
+      "scrollW": 390,
+      "clientW": 390,
+      "bodyW": 390,
+      "overflow_x": false,
+      "overflow_by": 0,
+      "widest": [],
+      "viewport_h": 844,
+      "doc_h": 4403
+    },
+    "console_warn_err": [],
+    "page_errors": []
+  },
+  "/news": {
+    "url": "/news",
+    "metrics": {
+      "title": "Emergent | Fullstack App",
+      "overlay_present": false,
+      "overlay_text": null,
+      "scrollW": 390,
+      "clientW": 390,
+      "bodyW": 390,
+      "overflow_x": false,
+      "overflow_by": 0,
+      "widest": [],
+      "viewport_h": 844,
+      "doc_h": 3289
+    },
+    "console_warn_err": [],
+    "page_errors": []
+  },
+  "/contact": {
+    "url": "/contact",
+    "metrics": {
+      "title": "Emergent | Fullstack App",
+      "overlay_present": false,
+      "overlay_text": null,
+      "scrollW": 390,
+      "clientW": 390,
+      "bodyW": 390,
+      "overflow_x": false,
+      "overflow_by": 0,
+      "widest": [],
+      "viewport_h": 844,
+      "doc_h": 3368
+    },
+    "console_warn_err": [],
+    "page_errors": []
+  }
+}
