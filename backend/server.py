@@ -525,7 +525,7 @@ SEED_PAGES = {
     "story": {
         "overline": "Our Story",
         "title": "A continuous thread, vintage to vintage",
-        "body": "Sineann was founded on the belief that wine is a story told slowly. Rooted in vineyard-focused winemaking and a long history of distinctive label art, our identity is shaped as much by craft as by character.\n\nThe subtle Celtic knotwork found across our labels is a quiet nod to heritage — a thread that runs from soil to cellar to table. We keep it understated by design.\n\nToday that story continues with our estate collection and current features like the Train Graffiti Art Series — heritage first, always.",
+        "body": "Sineann (shuh‑NAY‑uhn) is a small winery dedicated to crafting intensely expressive wines from the region’s finest vineyards. Nearly all our bottlings are single‑vineyard wines, grown at low crop levels so the character of the varietal and its terroir can shine.\n\nWe take a meticulous, minimalist approach in the cellar—gentle handling, careful fermentations, and aging in French oak—to preserve the individuality of each wine. The result is a portfolio that reflects both the skill of our growers and the pride we take in every bottle.\n\nAt the end of the day, we make the kind of wine we want on our own dinner table. We believe that food and wine, thoughtfully made and shared, bring people together and make life a little happier.",
         "label_history_title": "A light-touch label history",
         "label_history_body": "Label design has always been part of Sineann's personality. From engraved heritage crests to the bold artwork of our current series, each label marks a chapter in an evolving creative history.",
     },
