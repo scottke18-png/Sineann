@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { api, formatApiErrorDetail } from "@/lib/api";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { adminInput, adminBtn, adminBtnGhost, Field } from "@/pages/admin/adminUi";
 import { Pencil, Trash2, Plus } from "lucide-react";
 
