@@ -68,9 +68,9 @@ export default function WineDetail() {
 
             {wine.label_image_url && (
               <div className="mb-9">
-                <p className="overline mb-3">Label Detail</p>
-                <div className="border border-white/10 overflow-hidden aspect-[16/9]">
-                  <img src={wine.label_image_url} alt={`${wine.name} label`} className="w-full h-full object-cover" />
+                <p className="overline mb-3">Back Label</p>
+                <div className="border border-white/10 bg-white/[0.04] flex justify-center p-4">
+                  <img src={wine.label_image_url} alt={`${wine.name} back label`} className="max-h-[600px] w-auto object-contain" />
                 </div>
               </div>
             )}
