@@ -40,7 +40,8 @@ admin@sineann.com / Sineann2026! (see /app/memory/test_credentials.md)
 
 ## Backlog / Next
 - P0: Verify a sending domain in Resend (removes 1 email/day limit + enables reliable delivery to sineannwinery@outlook.com). Requires user's domain + DNS access. Update SENDER_EMAIL to a verified address after.
-- P1: Add prices to the 13 real wines (awaiting pricing data from user; editable via CMS Wines tab).
+- DONE (2026-07-07): Prices added to all 13 wines ($20–$48).
+- P0 pending: Verify sineann.com in Resend, then set SENDER_EMAIL=noreply@sineann.com.
 - P2: Age verification gate (currently none, per user choice)
 - P2: Replace native confirm() deletes with shadcn AlertDialog
 - P2: Filterable wine archive (varietal/vintage/appellation), events calendar, richer label-history gallery
