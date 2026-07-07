@@ -17,7 +17,7 @@ export default function Visit() {
 
   return (
     <div data-testid="visit-page">
-      <PageHeader overline={c.overline || "Visit"} title={c.title || "Sit with us a while"} subtitle={c.body} image={ASSETS.heroVineyard} />
+      <PageHeader overline={c.overline || "Visit"} title={c.title || "Sit with us a while"} subtitle={c.body} image={c.hero_image || ASSETS.heroVineyard} />
       <section className="px-6 pb-28">
         <div className="max-w-[1100px] mx-auto grid lg:grid-cols-2 gap-14">
           <div className="space-y-8">

@@ -193,6 +193,8 @@ class SubmissionInput(BaseModel):
     phone: Optional[str] = ""
     subject: Optional[str] = ""
     club_preference: Optional[str] = ""
+    wine_interest: Optional[str] = ""
+    quantity: Optional[str] = ""
     message: str
 
 class NewsletterInput(BaseModel):
@@ -353,6 +355,8 @@ async def create_submission(payload: SubmissionInput):
         <p><b>Phone:</b> {doc.get('phone','')}</p>
         <p><b>Subject:</b> {doc.get('subject','')}</p>
         {f"<p><b>Club preference:</b> {doc['club_preference']}</p>" if doc.get('club_preference') else ""}
+        {f"<p><b>Wine of interest:</b> {doc['wine_interest']}</p>" if doc.get('wine_interest') else ""}
+        {f"<p><b>Quantity:</b> {doc['quantity']}</p>" if doc.get('quantity') else ""}
         <p><b>Message:</b><br/>{doc['message']}</p>
         </td></tr></table>"""
         await send_email(notify, f"Sineann: new {doc['type']} inquiry from {doc['name']}", html)
@@ -528,6 +532,7 @@ SEED_PAGES = {
     "story": {
         "overline": "Our Story",
         "title": "A continuous thread, vintage to vintage",
+        "hero_image": "https://images.unsplash.com/photo-1724082111671-eb2a4c01d40d",
         "body": "Sineann (shuh‑NAY‑uhn) is a small winery dedicated to crafting intensely expressive wines from the region’s finest vineyards. Nearly all our bottlings are single‑vineyard wines, grown at low crop levels so the character of the varietal and its terroir can shine.\n\nWe take a meticulous, minimalist approach in the cellar—gentle handling, careful fermentations, and aging in French oak—to preserve the individuality of each wine. The result is a portfolio that reflects both the skill of our growers and the pride we take in every bottle.\n\nAt the end of the day, we make the kind of wine we want on our own dinner table. We believe that food and wine, thoughtfully made and shared, bring people together and make life a little happier.",
         "label_history_title": "A light-touch label history",
         "label_history_body": "Label design has always been part of Sineann's personality. From engraved heritage crests to the bold artwork of our current series, each label marks a chapter in an evolving creative history.",
@@ -535,6 +540,7 @@ SEED_PAGES = {
     "visit": {
         "overline": "Visit",
         "title": "Sit with us a while",
+        "hero_image": "https://images.pexels.com/photos/18248851/pexels-photo-18248851.jpeg",
         "body": "Our tasting room welcomes guests by appointment and on select weekends. Come taste current releases, walk the estate, and hear the stories behind the labels.",
         "hours": "Fri – Sun · 11am – 5pm\nWeekday visits by appointment",
         "address": "8400 Champoeg Rd.\nSt Paul, OR 97137",
@@ -543,6 +549,7 @@ SEED_PAGES = {
     "wineclub": {
         "overline": "Wine Club",
         "title": "Join the table",
+        "hero_image": "https://images.unsplash.com/photo-1561461056-77634126673a",
         "body": "Membership is the best way to experience Sineann. Members receive first access to new releases, member pricing, and invitations to estate events.",
         "reds_title": "Reds Only",
         "reds_body": "For lovers of structure and depth. Two shipments per year featuring our estate reds and Artist Series releases.",
@@ -612,6 +619,13 @@ async def startup() -> None:
     for key, content in SEED_PAGES.items():
         if await db.pages.find_one({"key": key}) is None:
             await db.pages.insert_one({"key": key, "content": content, "updated_at": now_iso()})
+    # migration: ensure editable hero_image exists on story/visit/wineclub pages
+    for key in ("story", "visit", "wineclub"):
+        page = await db.pages.find_one({"key": key})
+        if page and not page.get("content", {}).get("hero_image"):
+            await db.pages.update_one(
+                {"key": key},
+                {"$set": {"content.hero_image": SEED_PAGES[key]["hero_image"]}})
 
 
 @app.on_event("shutdown")

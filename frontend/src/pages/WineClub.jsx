@@ -9,7 +9,7 @@ export default function WineClub() {
   const benefits = (c.benefits || "").split("\n").filter(Boolean);
   return (
     <div data-testid="wineclub-page">
-      <PageHeader overline={c.overline || "Wine Club"} title={c.title || "Join the table"} subtitle={c.body} image={ASSETS.wineDetail} />
+      <PageHeader overline={c.overline || "Wine Club"} title={c.title || "Join the table"} subtitle={c.body} image={c.hero_image || ASSETS.wineDetail} />
 
       <section className="px-6 pb-20">
         <div className="max-w-[1100px] mx-auto grid md:grid-cols-2 gap-8">

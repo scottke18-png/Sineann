@@ -42,6 +42,8 @@ export default function SubmissionsManager() {
             </div>
             {s.subject && <p className="text-secondary text-sm mb-1"><span className="overline">Subject:</span> {s.subject}</p>}
             {s.club_preference && <p className="text-secondary text-sm mb-1"><span className="overline">Club:</span> {s.club_preference}</p>}
+            {s.wine_interest && <p className="text-secondary text-sm mb-1"><span className="overline">Wine:</span> {s.wine_interest}</p>}
+            {s.quantity && <p className="text-secondary text-sm mb-1"><span className="overline">Quantity:</span> {s.quantity}</p>}
             <p className="text-[#F5F5F0] text-sm leading-relaxed whitespace-pre-line">{s.message}</p>
           </div>
         ))}

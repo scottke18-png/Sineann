@@ -89,7 +89,7 @@ export default function WineDetail() {
             <p className="overline mb-4">Direct Purchase</p>
             <h2 className="font-heading text-3xl sm:text-4xl font-light text-[#F5F5F0]">Inquire about {wine.name}</h2>
           </div>
-          <InquiryForm defaultType="purchase" subject={`${wine.name} ${wine.vintage || ""}`.trim()} />
+          <InquiryForm defaultType="purchase" subject={`${wine.name} ${wine.vintage || ""}`.trim()} defaultWine={`${wine.name} ${wine.vintage || ""}`.trim()} />
         </div>
       </section>
     </div>

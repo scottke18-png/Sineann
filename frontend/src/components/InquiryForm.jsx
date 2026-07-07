@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { api, formatApiErrorDetail } from "@/lib/api";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,9 +10,19 @@ const TYPES = [
   { value: "general", label: "General Inquiry" },
 ];
 
-export default function InquiryForm({ defaultType = "general", subject = "" }) {
-  const [form, setForm] = useState({ type: defaultType, name: "", email: "", phone: "", subject, club_preference: "", message: "" });
+const QUANTITIES = ["1 bottle", "2 bottles", "3 bottles", "6 bottles", "A case (12)", "More than a case"];
+
+export default function InquiryForm({ defaultType = "general", subject = "", defaultWine = "" }) {
+  const [form, setForm] = useState({
+    type: defaultType, name: "", email: "", phone: "", subject,
+    club_preference: "", wine_interest: defaultWine, quantity: "", message: "",
+  });
+  const [wines, setWines] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    api.get("/wines").then((r) => setWines(r.data)).catch(() => {});
+  }, []);
 
   const update = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -26,7 +36,7 @@ export default function InquiryForm({ defaultType = "general", subject = "" }) {
     try {
       await api.post("/submissions", form);
       toast.success("Thank you — your inquiry has been received. We'll be in touch shortly.");
-      setForm({ type: defaultType, name: "", email: "", phone: "", subject, club_preference: "", message: "" });
+      setForm({ type: defaultType, name: "", email: "", phone: "", subject, club_preference: "", wine_interest: defaultWine, quantity: "", message: "" });
     } catch (err) {
       toast.error(formatApiErrorDetail(err.response?.data?.detail));
     } finally {
@@ -36,36 +46,75 @@ export default function InquiryForm({ defaultType = "general", subject = "" }) {
 
   const inputCls =
     "w-full bg-transparent border border-white/20 px-4 py-3 text-sm text-[#F5F5F0] placeholder:text-[#6b6560] focus:outline-none focus:border-wine transition-colors";
+  const triggerCls =
+    "bg-transparent border-white/20 text-[#F5F5F0] rounded-none h-12 focus:ring-wine";
+  const contentCls = "bg-[#141414] border-white/10 text-[#F5F5F0]";
+
+  const wineOptions = wines.map((w) => `${w.name}${w.vintage ? ` ${w.vintage}` : ""}`.trim());
 
   return (
     <form onSubmit={submit} className="space-y-5" data-testid="inquiry-form">
       <div>
         <label className="overline block mb-2">Inquiry Type</label>
         <Select value={form.type} onValueChange={(v) => update("type", v)}>
-          <SelectTrigger data-testid="inquiry-type-select" className="bg-transparent border-white/20 text-[#F5F5F0] rounded-none h-12 focus:ring-wine">
+          <SelectTrigger data-testid="inquiry-type-select" className={triggerCls}>
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="bg-[#141414] border-white/10 text-[#F5F5F0]">
+          <SelectContent className={contentCls}>
             {TYPES.map((t) => (
               <SelectItem key={t.value} value={t.value} data-testid={`inquiry-type-${t.value}`}>{t.label}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
+
       {form.type === "wineclub" && (
         <div data-testid="club-preference-field">
           <label className="overline block mb-2">Which Club?</label>
           <Select value={form.club_preference} onValueChange={(v) => update("club_preference", v)}>
-            <SelectTrigger data-testid="club-preference-select" className="bg-transparent border-white/20 text-[#F5F5F0] rounded-none h-12 focus:ring-wine">
+            <SelectTrigger data-testid="club-preference-select" className={triggerCls}>
               <SelectValue placeholder="Select a club" />
             </SelectTrigger>
-            <SelectContent className="bg-[#141414] border-white/10 text-[#F5F5F0]">
+            <SelectContent className={contentCls}>
               <SelectItem value="Reds Only" data-testid="club-option-reds">Reds Only</SelectItem>
               <SelectItem value="All Wines" data-testid="club-option-all">All Wines</SelectItem>
             </SelectContent>
           </Select>
         </div>
       )}
+
+      {form.type === "purchase" && (
+        <div className="grid sm:grid-cols-2 gap-5" data-testid="purchase-fields">
+          <div>
+            <label className="overline block mb-2">Which Wine?</label>
+            <Select value={form.wine_interest} onValueChange={(v) => update("wine_interest", v)}>
+              <SelectTrigger data-testid="wine-interest-select" className={triggerCls}>
+                <SelectValue placeholder="Select a wine" />
+              </SelectTrigger>
+              <SelectContent className={`${contentCls} max-h-72`}>
+                {wineOptions.map((label) => (
+                  <SelectItem key={label} value={label} data-testid={`wine-option-${label}`}>{label}</SelectItem>
+                ))}
+                <SelectItem value="Not sure / other" data-testid="wine-option-other">Not sure / other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <label className="overline block mb-2">How Many?</label>
+            <Select value={form.quantity} onValueChange={(v) => update("quantity", v)}>
+              <SelectTrigger data-testid="quantity-select" className={triggerCls}>
+                <SelectValue placeholder="Select quantity" />
+              </SelectTrigger>
+              <SelectContent className={contentCls}>
+                {QUANTITIES.map((q) => (
+                  <SelectItem key={q} value={q} data-testid={`quantity-option-${q}`}>{q}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      )}
+
       <div className="grid sm:grid-cols-2 gap-5">
         <div>
           <label className="overline block mb-2">Name</label>

@@ -8,7 +8,7 @@ export default function Story() {
   const c = usePageContent("story");
   return (
     <div data-testid="story-page">
-      <PageHeader overline={c.overline || "Our Story"} title={c.title || "A continuous thread"} image={ASSETS.cellar} />
+      <PageHeader overline={c.overline || "Our Story"} title={c.title || "A continuous thread"} image={c.hero_image || ASSETS.cellar} />
       <section className="px-6 pb-24">
         <div className="max-w-[1100px] mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <div className="order-2 lg:order-1">
