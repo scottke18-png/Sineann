@@ -56,10 +56,10 @@ export default function Home() {
       <section className="celtic-bg py-28 px-6" data-testid="home-intro">
         <div className="max-w-[1200px] mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <div className="relative">
-            <img src={ASSETS.cellar} alt="Our cellar" className="w-full aspect-[4/5] object-cover border border-white/10" />
+            <img src={content.intro_image || ASSETS.cellar} alt="Our approach" className="w-full aspect-[4/5] object-cover border border-white/10" />
             <div className="absolute -bottom-6 -right-6 hidden md:block bg-[#141414] border border-white/10 px-8 py-6">
-              <p className="font-heading text-4xl text-[#F5F5F0]">1878</p>
-              <p className="overline mt-1">Since</p>
+              <p className="font-heading text-4xl text-[#F5F5F0]">{content.intro_year || "1878"}</p>
+              <p className="overline mt-1">{content.intro_year_label || "Since"}</p>
             </div>
           </div>
           <div>

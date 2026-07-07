@@ -60,7 +60,7 @@ export default function PagesManager() {
           {active && Object.keys(content).map((k) => (
             <Field key={k} label={fieldLabel(k)}>
               {k.endsWith("image") ? (
-                <ImageUploader testId={`page-${k}`} aspect={16 / 9} value={content[k]} onChange={(url) => update(k, url)} />
+                <ImageUploader testId={`page-${k}`} aspect={k === "intro_image" ? 4 / 5 : 16 / 9} value={content[k]} onChange={(url) => update(k, url)} />
               ) : /body|benefits|hours|address|notes/.test(k) ? (
                 <textarea rows={3} className={adminInput} value={content[k]} onChange={(e) => update(k, e.target.value)} data-testid={`page-field-${k}`} />
               ) : (

@@ -521,6 +521,9 @@ SEED_PAGES = {
         "intro_overline": "Our Approach",
         "intro_title": "Patient winemaking, honest fruit",
         "intro_body": "For generations, Sineann has followed a simple conviction: exceptional wine begins in the vineyard and is finished with restraint. We farm for balance, ferment with native yeasts, and let each site speak clearly. The result is a portfolio that feels both established and alive.",
+        "intro_image": "https://images.unsplash.com/photo-1724082111671-eb2a4c01d40d",
+        "intro_year": "1878",
+        "intro_year_label": "Since",
     },
     "story": {
         "overline": "Our Story",
