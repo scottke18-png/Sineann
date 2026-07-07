@@ -38,8 +38,8 @@ export default function NewsDetail() {
         </div>
       )}
       <div className="max-w-[720px] mx-auto px-6">
-        {(post.body || "").split("\n\n").map((p, i) => (
-          <p key={i} className="text-secondary text-lg leading-relaxed mb-6 font-light">{p}</p>
+        {(post.body || "").split("\n\n").map((p) => (
+          <p key={`post-${p.slice(0, 32)}`} className="text-secondary text-lg leading-relaxed mb-6 font-light">{p}</p>
         ))}
         <CelticDivider className="mt-14" />
       </div>

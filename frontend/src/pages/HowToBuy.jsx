@@ -16,7 +16,7 @@ export default function HowToBuy() {
             { icon: Mail, title: "Send an inquiry", body: "Tell us what you're after using the form below or by email." },
             { icon: Truck, title: "We arrange it", body: "We'll confirm availability, pricing and delivery, and take care of the rest." },
           ].map((s, i) => (
-            <div key={i} className="bg-[#141414] border border-white/10 p-8 text-center">
+            <div key={s.title} className="bg-[#141414] border border-white/10 p-8 text-center">
               <s.icon className="text-wine mx-auto mb-5" size={26} />
               <p className="overline mb-2">Step {i + 1}</p>
               <h3 className="font-heading text-xl text-[#F5F5F0] mb-3">{s.title}</h3>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { Trash2, Mail, Check } from "lucide-react";
@@ -8,8 +8,10 @@ const TYPE_LABEL = { purchase: "Purchase", wineclub: "Wine Club", visit: "Visit"
 export default function SubmissionsManager() {
   const [subs, setSubs] = useState([]);
 
-  const load = () => api.get("/submissions").then((r) => setSubs(r.data)).catch(() => {});
-  useEffect(() => { load(); }, []);
+  const load = useCallback(() => {
+    api.get("/submissions").then((r) => setSubs(r.data)).catch(() => {});
+  }, []);
+  useEffect(() => { load(); }, [load]);
 
   const markRead = async (s) => { await api.patch(`/submissions/${s.id}/read`); load(); };
   const remove = async (s) => {

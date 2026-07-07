@@ -12,8 +12,8 @@ export default function Story() {
       <section className="px-6 pb-24">
         <div className="max-w-[1100px] mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <div className="order-2 lg:order-1">
-            {(c.body || "").split("\n\n").map((p, i) => (
-              <p key={i} className="text-secondary leading-relaxed mb-5 text-base">{p}</p>
+            {(c.body || "").split("\n\n").map((p) => (
+              <p key={`story-${p.slice(0, 32)}`} className="text-secondary leading-relaxed mb-5 text-base">{p}</p>
             ))}
           </div>
           <div className="order-1 lg:order-2 relative celtic-weave p-3 border border-white/10">

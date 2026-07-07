@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { Trash2, Copy, Upload } from "lucide-react";
@@ -7,8 +7,10 @@ export default function MediaManager() {
   const [media, setMedia] = useState([]);
   const [uploading, setUploading] = useState(false);
 
-  const load = () => api.get("/media").then((r) => setMedia(r.data)).catch(() => {});
-  useEffect(() => { load(); }, []);
+  const load = useCallback(() => {
+    api.get("/media").then((r) => setMedia(r.data)).catch(() => {});
+  }, []);
+  useEffect(() => { load(); }, [load]);
 
   const onUpload = async (e) => {
     const file = e.target.files?.[0];

@@ -73,7 +73,7 @@ async def get_current_user(request: Request) -> dict:
 
 
 # ---------------- Storage helpers ----------------
-def init_storage():
+def init_storage() -> str:
     global storage_key
     if storage_key:
         return storage_key
@@ -90,7 +90,7 @@ def put_object(path: str, data: bytes, content_type: str) -> dict:
     resp.raise_for_status()
     return resp.json()
 
-def get_object(path: str):
+def get_object(path: str) -> tuple:
     key = init_storage()
     resp = requests.get(f"{STORAGE_URL}/objects/{path}", headers={"X-Storage-Key": key}, timeout=60)
     resp.raise_for_status()
@@ -101,7 +101,7 @@ MIME_TYPES = {"jpg": "image/jpeg", "jpeg": "image/jpeg", "png": "image/png",
 
 
 # ---------------- Email helper ----------------
-async def send_email(to: str, subject: str, html: str):
+async def send_email(to: str, subject: str, html: str) -> dict:
     api_key = os.environ.get("RESEND_API_KEY", "")
     if not api_key:
         logger.info(f"[EMAIL SKIPPED - no RESEND_API_KEY] to={to} subject={subject}")
@@ -117,7 +117,7 @@ async def send_email(to: str, subject: str, html: str):
         return {"status": "error", "detail": str(e)}
 
 
-def now_iso():
+def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
@@ -207,7 +207,7 @@ def slugify(text: str) -> str:
 
 # ---------------- Auth routes ----------------
 @api_router.post("/auth/login")
-async def login(payload: LoginRequest, response: Response):
+async def login(payload: LoginRequest, response: Response) -> dict:
     email = payload.email.lower()
     user = await db.users.find_one({"email": email})
     if not user or not verify_password(payload.password, user["password_hash"]):
@@ -230,7 +230,7 @@ async def me(current=Depends(get_current_user)):
 
 # ---------------- Wines ----------------
 @api_router.get("/wines")
-async def list_wines(featured: Optional[bool] = None, series: Optional[str] = None):
+async def list_wines(featured: Optional[bool] = None, series: Optional[str] = None) -> list:
     q = {}
     if featured is not None:
         q["featured"] = featured
@@ -240,7 +240,7 @@ async def list_wines(featured: Optional[bool] = None, series: Optional[str] = No
     return wines
 
 @api_router.get("/wines/{slug}")
-async def get_wine(slug: str):
+async def get_wine(slug: str) -> dict:
     wine = await db.wines.find_one({"slug": slug}, {"_id": 0})
     if not wine:
         raise HTTPException(status_code=404, detail="Wine not found")
@@ -572,7 +572,7 @@ SEED_PAGES = {
 
 
 @app.on_event("startup")
-async def startup():
+async def startup() -> None:
     # storage
     try:
         init_storage()
@@ -614,3 +614,4 @@ async def startup():
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+

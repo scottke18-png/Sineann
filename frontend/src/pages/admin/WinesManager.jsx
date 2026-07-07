@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 import { api, formatApiErrorDetail } from "@/lib/api";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -19,8 +19,10 @@ export default function WinesManager() {
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
 
-  const load = () => api.get("/wines").then((r) => setWines(r.data)).catch(() => {});
-  useEffect(() => { load(); }, []);
+  const load = useCallback(() => {
+    api.get("/wines").then((r) => setWines(r.data)).catch(() => {});
+  }, []);
+  useEffect(() => { load(); }, [load]);
 
   const seriesOptions = Array.from(new Set(["Estate", "Train Graffiti", ...wines.map((w) => w.series).filter(Boolean)]));
 

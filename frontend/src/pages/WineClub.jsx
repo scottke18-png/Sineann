@@ -31,8 +31,8 @@ export default function WineClub() {
           <div className="max-w-[900px] mx-auto text-center">
             <p className="overline mb-8">Member Benefits</p>
             <div className="grid sm:grid-cols-2 gap-4 text-left">
-              {benefits.map((b, i) => (
-                <div key={i} className="flex items-center gap-3 border border-white/10 px-5 py-4">
+              {benefits.map((b) => (
+                <div key={b} className="flex items-center gap-3 border border-white/10 px-5 py-4">
                   <Check className="text-wine shrink-0" size={18} />
                   <span className="text-[#F5F5F0] text-sm">{b}</span>
                 </div>

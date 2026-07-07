@@ -88,9 +88,9 @@ class TestWines:
         assert len(wines) >= 1
 
     def test_get_wine_by_slug(self, api):
-        r = api.get(f"{API}/wines/celtic-oak-cabernet-2021")
+        r = api.get(f"{API}/wines/old-vine-zinfandel-2024")
         assert r.status_code == 200
-        assert r.json()["varietal"] == "Cabernet Sauvignon"
+        assert r.json()["varietal"].lower().startswith("zinfandel")
 
     def test_get_wine_not_found(self, api):
         r = api.get(f"{API}/wines/nonexistent-slug-xyz")
@@ -178,13 +178,19 @@ class TestPages:
         assert r.status_code == 200 and isinstance(r.json(), list)
 
     def test_update_page(self, auth_headers):
-        content = {"hero_title": f"TEST_Title_{uuid.uuid4().hex[:6]}", "extra": "hello"}
-        r = requests.put(f"{API}/pages/home", json={"content": content}, headers=auth_headers)
+        # Non-destructive: read current content, add/modify a marker field, PUT full doc back
+        orig = requests.get(f"{API}/pages/home").json()["content"]
+        marker_value = f"TEST_marker_{uuid.uuid4().hex[:6]}"
+        merged = {**orig, "test_marker": marker_value}
+        r = requests.put(f"{API}/pages/home", json={"content": merged}, headers=auth_headers)
         assert r.status_code == 200
-        # Verify persist
         g = requests.get(f"{API}/pages/home")
         assert g.status_code == 200
-        assert g.json()["content"]["hero_title"] == content["hero_title"]
+        assert g.json()["content"]["test_marker"] == marker_value
+        # Restore original content (drop test_marker) so live UI is not polluted
+        restore = requests.put(f"{API}/pages/home", json={"content": orig}, headers=auth_headers)
+        assert restore.status_code == 200
+        assert "test_marker" not in restore.json()["content"]
 
 
 # ---------------- Submissions ----------------

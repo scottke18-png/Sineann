@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 import { api, formatApiErrorDetail } from "@/lib/api";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -15,8 +15,10 @@ export default function PostsManager() {
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
 
-  const load = () => api.get("/posts", { params: { all: true } }).then((r) => setPosts(r.data)).catch(() => {});
-  useEffect(() => { load(); }, []);
+  const load = useCallback(() => {
+    api.get("/posts", { params: { all: true } }).then((r) => setPosts(r.data)).catch(() => {});
+  }, []);
+  useEffect(() => { load(); }, [load]);
 
   const openNew = () => { setEditing(null); setForm(EMPTY); setOpen(true); };
   const openEdit = (p) => { setEditing(p); setForm({ ...EMPTY, ...p }); setOpen(true); };

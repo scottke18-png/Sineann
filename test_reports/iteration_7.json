@@ -1,0 +1,77 @@
+{
+  "summary": "Regression pass after CORS hardening, useCallback refactor in 5 admin managers, stable-key React fixes. All 27 backend tests PASS. Public site + admin CMS fully functional with ZERO console errors, ZERO React key warnings, ZERO failed network requests. No infinite request loops on any admin tab (verified by 3-second idle observation). PagesManager auto-selects Homepage tab and shows editable fields on tab open. Home page save round-trip (edit -> save toast -> restore -> save toast) works and data persisted. Wine CRUD via UI (create TEST wine, delete via native confirm) works end-to-end. Backend CORS confirmed hardened (explicit FRONTEND_URL, credentials=true; unknown origins get 400).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "verifications": {
+    "cors_hardening": {
+      "public_url_backend_direct_allowed_origin": "returns access-control-allow-origin: https://vineyard-heritage-1.preview.emergentagent.com and allow-credentials: true",
+      "public_url_backend_direct_unknown_origin": "returns 400 Bad Request with no allow-origin header",
+      "note": "The Kubernetes ingress adds access-control-allow-origin: * to responses at the edge, but the backend itself enforces the explicit-origin policy. Frontend calls are same-origin so CORS is not triggered.",
+      "status": "PASS"
+    },
+    "wines_seeded_count": {"expected": 13, "actual_api": 13, "actual_admin_ui": 13, "status": "PASS"},
+    "posts_seeded_count": {"expected": 3, "actual_ui": 3, "status": "PASS"},
+    "admin_tabs_no_loop": {
+      "wines": {"idle_api_reqs_over_3s": 0},
+      "posts": {"idle_api_reqs_over_3s": 0, "initial_load_calls": 2},
+      "submissions": {"idle_api_reqs_over_3s": 0, "initial_load_calls": 2},
+      "newsletter": {"idle_api_reqs_over_3s": 0, "initial_load_calls": 2},
+      "media": {"idle_api_reqs_over_3s": 0, "initial_load_calls": 2},
+      "pages": {"idle_api_reqs_over_3s": 0, "initial_load_calls": 2},
+      "note": "Initial load count of 2 per tab is React 18 StrictMode dev double-mount behavior, not a useCallback loop. Zero requests during idle after mount confirms no infinite loop.",
+      "status": "PASS"
+    },
+    "pages_manager_auto_select": {
+      "first_tab_active_on_open": "Homepage (page-tab-home)",
+      "hero_title_field_visible_without_click": true,
+      "original_hero_title_read": "Wines woven from heritage & craft",
+      "edit_save_toast": "Page content saved.",
+      "restore_save_toast": "Page content saved.",
+      "all_seed_keys_preserved_after_edit_restore": ["hero_overline","hero_title","hero_subtitle","intro_overline","intro_title","intro_body"],
+      "status": "PASS"
+    },
+    "wines_crud_ui_flow": {
+      "before_add": 13,
+      "after_add_TEST_Regression_Wine": 14,
+      "after_delete_native_confirm": 13,
+      "status": "PASS"
+    },
+    "stable_keys_no_warnings": {
+      "routes_checked": ["/story","/train-series","/wine-club","/how-to-buy","/news/spring-release-2026","/news/a-note-on-celtic-heritage","/news/story-behind-train-graffiti"],
+      "react_unique_key_warnings": 0,
+      "status": "PASS"
+    },
+    "general_regression": {
+      "home_ok": true,
+      "wines_list_13": true,
+      "wine_detail_old_vine_zinfandel_back_label_image_present": true,
+      "visit_google_map_iframe_present": true,
+      "contact_form_submit_success_toast": "Thank you — your inquiry has been received. We'll be in touch shortly.",
+      "how_to_buy_step_labels": ["STEP 1","STEP 2","STEP 3"],
+      "console_errors_total_public_routes": 0,
+      "network_failures": 0,
+      "status": "PASS"
+    }
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/iteration_7.xml"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "PUT /api/pages/{key} is destructive full-replace of the content object. It works fine for the admin UI (which always POSTs the full merged content), but any partial-update client would clobber sibling fields. Not urgent, but a PATCH/merge variant would be safer.",
+    "The existing backend_test.py had a destructive test_update_page that wiped the seeded home content (setting only hero_title + extra). Fixed in this iteration: test now reads original, merges a marker, verifies persist, then restores original. Live home page has been restored to the correct 'Wines woven from heritage & craft' seed value.",
+    "test_get_wine_by_slug was still pointing at the old catalog slug 'celtic-oak-cabernet-2021' which no longer exists after the 13-wine catalog refactor. Updated to 'old-vine-zinfandel-2024' which is in the current seed."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100% (27/27)", "frontend": "100%"},
+  "test_credentials": "admin@sineann.com / Sineann2026! (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "None. Created and cleaned up: 1 TEST wine (created via admin UI then deleted), 1 TEST contact submission (deleted via API), 1 test_marker key on home page (removed as part of test flow).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Iteration 7 = regression after CORS hardening + useCallback hook-dep refactor + stable-key fixes. All PASS. Catalog now has 13 wines (9 Estate + 4 Train Graffiti). Home page seed keys: hero_overline, hero_title, hero_subtitle, intro_overline, intro_title, intro_body (no 'title' key — the review-request mention of data-testid='page-field-title' was a minor typo; actual field is page-field-hero_title). Existing backend_test.py test_update_page previously clobbered home page content; now fixed to be non-destructive. Public URL for testing: https://vineyard-heritage-1.preview.emergentagent.com. Backend CORS enforcement works at the app level but the ingress adds '*' at the edge — verify via localhost:8001 for the real backend behavior if CORS is retested."
+}

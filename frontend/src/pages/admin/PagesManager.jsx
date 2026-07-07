@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 import { api, formatApiErrorDetail } from "@/lib/api";
 import { adminInput, adminBtn, Field } from "@/pages/admin/adminUi";
@@ -15,11 +15,14 @@ export default function PagesManager() {
   const [content, setContent] = useState({});
   const [saving, setSaving] = useState(false);
 
-  const load = () => api.get("/pages").then((r) => {
-    setPages(r.data);
-    if (r.data.length && !active) selectPage(r.data[0]);
-  }).catch(() => {});
-  useEffect(() => { load(); /* eslint-disable-next-line */ }, []);
+  const load = useCallback(() => {
+    api.get("/pages").then((r) => {
+      setPages(r.data);
+      setActive((prev) => prev || (r.data[0]?.key ?? null));
+      setContent((prev) => (Object.keys(prev).length ? prev : (r.data[0]?.content ? { ...r.data[0].content } : {})));
+    }).catch(() => {});
+  }, []);
+  useEffect(() => { load(); }, [load]);
 
   const selectPage = (p) => { setActive(p.key); setContent({ ...p.content }); };
   const update = (k, v) => setContent((c) => ({ ...c, [k]: v }));
