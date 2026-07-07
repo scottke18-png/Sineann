@@ -23,7 +23,11 @@ Modern web-based redesign for Sineann winery. Position the established winery br
 - Prospective Wine Club members
 - Internal staff managing content
 
-## Implemented (2026-07-02)
+## Implemented (2026-07-07)
+- Purchase inquiry form: "Which Wine?" (auto-selects viewed wine) + "How Many?" selectors; wine_interest & quantity stored, shown in admin, included in notification email.
+- Story / Visit / Wine Club hero images now editable via Admin → Page Content (hero_image key; DB migration added on startup).
+- Resend email dispatch ACTIVATED (RESEND_API_KEY set). Sends from onboarding@resend.dev to sineannwinery@outlook.com. NOTE: account unverified — 1 email/day cap until a domain is verified.
+
 - Public site: Home, Our Wines (+ filters), Wine Detail (inquiry), Our Story (label history), Visit, Wine Club (Reds Only / All Wines), How to Buy, Train Graffiti Series page, News list + detail, Contact
 - Reusable inquiry form (purchase / wine club / visit / general) + footer newsletter signup
 - Celtic dividers, weave textures, dark luxury theme, Cormorant/Outfit typography
@@ -35,7 +39,8 @@ Modern web-based redesign for Sineann winery. Position the established winery br
 admin@sineann.com / Sineann2026! (see /app/memory/test_credentials.md)
 
 ## Backlog / Next
-- P1: Provide RESEND_API_KEY + verify sender domain to activate real inquiry/newsletter emails
+- P0: Verify a sending domain in Resend (removes 1 email/day limit + enables reliable delivery to sineannwinery@outlook.com). Requires user's domain + DNS access. Update SENDER_EMAIL to a verified address after.
+- P1: Add prices to the 13 real wines (awaiting pricing data from user; editable via CMS Wines tab).
 - P2: Age verification gate (currently none, per user choice)
 - P2: Replace native confirm() deletes with shadcn AlertDialog
 - P2: Filterable wine archive (varietal/vintage/appellation), events calendar, richer label-history gallery
