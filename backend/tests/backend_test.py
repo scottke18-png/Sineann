@@ -178,19 +178,14 @@ class TestPages:
         assert r.status_code == 200 and isinstance(r.json(), list)
 
     def test_update_page(self, auth_headers):
-        # Non-destructive: read current content, add/modify a marker field, PUT full doc back
-        orig = requests.get(f"{API}/pages/home").json()["content"]
+        # SAFE: operate on a throwaway key so tests NEVER touch real page content (home/story/etc.).
+        test_key = f"qa_test_page_{uuid.uuid4().hex[:6]}"
         marker_value = f"TEST_marker_{uuid.uuid4().hex[:6]}"
-        merged = {**orig, "test_marker": marker_value}
-        r = requests.put(f"{API}/pages/home", json={"content": merged}, headers=auth_headers)
+        r = requests.put(f"{API}/pages/{test_key}", json={"content": {"test_marker": marker_value}}, headers=auth_headers)
         assert r.status_code == 200
-        g = requests.get(f"{API}/pages/home")
+        g = requests.get(f"{API}/pages/{test_key}")
         assert g.status_code == 200
         assert g.json()["content"]["test_marker"] == marker_value
-        # Restore original content (drop test_marker) so live UI is not polluted
-        restore = requests.put(f"{API}/pages/home", json={"content": orig}, headers=auth_headers)
-        assert restore.status_code == 200
-        assert "test_marker" not in restore.json()["content"]
 
 
 # ---------------- Submissions ----------------

@@ -332,6 +332,9 @@ async def get_page(key: str):
 
 @api_router.put("/pages/{key}")
 async def update_page(key: str, payload: PageInput, current=Depends(get_current_user)):
+    # Safety guard: never allow an empty content payload to wipe an existing page.
+    if not payload.content:
+        raise HTTPException(status_code=400, detail="Page content cannot be empty")
     await db.pages.update_one({"key": key},
                               {"$set": {"key": key, "content": payload.content, "updated_at": now_iso()}},
                               upsert=True)
