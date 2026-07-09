@@ -141,7 +141,7 @@ export default function ImageUploader({ value, onChange, aspect = 3 / 4, label, 
           data-testid={`default-${testId}`}
           className="mt-2 border border-white/20 hover:border-white/50 text-[#A8A39D] hover:text-[#F5F5F0] px-4 py-2 text-[0.7rem] tracking-[0.12em] uppercase transition-colors disabled:opacity-40 disabled:cursor-default"
         >
-          {value === defaultUrl ? "Using Default Image" : "Restore Default Image"}
+          Default
         </button>
       )}
 

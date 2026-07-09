@@ -20,8 +20,10 @@ export default function Home() {
     <div data-testid="home-page">
       {/* HERO */}
       <section className="relative h-[100svh] min-h-[640px] flex items-center justify-center">
-        <div className="absolute inset-0">
-          <img src={content.hero_image || ASSETS.heroVineyard} alt="Sineann vineyard" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-[#0A0A0A]">
+          {content.hero_image && (
+            <img src={content.hero_image} alt="Sineann vineyard" className="w-full h-full object-cover" />
+          )}
           <div className="absolute inset-0 hero-fade" />
         </div>
         <div className="relative text-center px-6 max-w-4xl">
