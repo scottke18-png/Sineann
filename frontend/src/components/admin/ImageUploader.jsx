@@ -32,7 +32,7 @@ async function getCroppedBlob(imageSrc, cropPixels, outW, outH) {
   return new Promise((resolve) => canvas.toBlob((b) => resolve(b), "image/jpeg", 0.92));
 }
 
-export default function ImageUploader({ value, onChange, aspect = 3 / 4, label, testId = "image" }) {
+export default function ImageUploader({ value, onChange, aspect = 3 / 4, label, testId = "image", defaultUrl = "", hint = "" }) {
   const MIN_ZOOM = 0.4;
   const MAX_ZOOM = 3;
   const [dragging, setDragging] = useState(false);
@@ -132,6 +132,22 @@ export default function ImageUploader({ value, onChange, aspect = 3 / 4, label, 
         data-testid={`url-input-${testId}`}
         className="w-full bg-[#0A0A0A] border border-white/15 px-3 py-2 mt-2 text-xs text-[#A8A39D] placeholder:text-[#5a544f] focus:outline-none focus:border-wine transition-colors"
       />
+
+      {defaultUrl && (
+        <button
+          type="button"
+          onClick={() => onChange(defaultUrl)}
+          disabled={value === defaultUrl}
+          data-testid={`default-${testId}`}
+          className="mt-2 border border-white/20 hover:border-white/50 text-[#A8A39D] hover:text-[#F5F5F0] px-4 py-2 text-[0.7rem] tracking-[0.12em] uppercase transition-colors disabled:opacity-40 disabled:cursor-default"
+        >
+          {value === defaultUrl ? "Using Default Image" : "Restore Default Image"}
+        </button>
+      )}
+
+      {hint && (
+        <p className="text-[#5a544f] text-[0.65rem] leading-relaxed mt-2" data-testid={`hint-${testId}`}>{hint}</p>
+      )}
 
       {/* Crop overlay */}
       {cropSrc && (

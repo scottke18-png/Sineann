@@ -522,6 +522,7 @@ SEED_PAGES = {
         "hero_overline": "Established 1878 · Estate Grown",
         "hero_title": "Wines woven from heritage & craft",
         "hero_subtitle": "Vineyard-driven winemaking meant to be shared around the table. A long-standing identity, quietly distinctive.",
+        "hero_image": "https://images.pexels.com/photos/18248851/pexels-photo-18248851.jpeg",
         "intro_overline": "Our Approach",
         "intro_title": "Patient winemaking, honest fruit",
         "intro_body": "For generations, Sineann has followed a simple conviction: exceptional wine begins in the vineyard and is finished with restraint. We farm for balance, ferment with native yeasts, and let each site speak clearly. The result is a portfolio that feels both established and alive.",
@@ -619,8 +620,8 @@ async def startup() -> None:
     for key, content in SEED_PAGES.items():
         if await db.pages.find_one({"key": key}) is None:
             await db.pages.insert_one({"key": key, "content": content, "updated_at": now_iso()})
-    # migration: ensure editable hero_image exists on story/visit/wineclub pages
-    for key in ("story", "visit", "wineclub"):
+    # migration: ensure editable hero_image exists on home/story/visit/wineclub pages
+    for key in ("home", "story", "visit", "wineclub"):
         page = await db.pages.find_one({"key": key})
         if page and not page.get("content", {}).get("hero_image"):
             await db.pages.update_one(

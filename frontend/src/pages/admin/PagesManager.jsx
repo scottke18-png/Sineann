@@ -9,6 +9,23 @@ const LABELS = {
   howtobuy: "How to Buy", train: "Art Series Page", contact: "Contact",
 };
 
+// Default images per page/field so staff can restore the original at any time.
+const IMAGE_DEFAULTS = {
+  home: {
+    hero_image: "https://images.pexels.com/photos/18248851/pexels-photo-18248851.jpeg",
+    intro_image: "https://images.unsplash.com/photo-1724082111671-eb2a4c01d40d",
+  },
+  story: { hero_image: "https://images.unsplash.com/photo-1724082111671-eb2a4c01d40d" },
+  visit: { hero_image: "https://images.pexels.com/photos/18248851/pexels-photo-18248851.jpeg" },
+  wineclub: { hero_image: "https://images.unsplash.com/photo-1561461056-77634126673a" },
+  train: { hero_image: "https://images.unsplash.com/photo-1648154008739-bd1b8cbb9074" },
+};
+
+const HERO_HINT =
+  "Recommended for background/hero images: landscape orientation, at least 1920 × 1080 px (ideally 2400 × 1350) for a crisp full-screen look. Accepted formats: JPG, PNG or WebP. Keep the file under ~5 MB. Uploaded images are automatically cropped to a 16:9 widescreen shape.";
+const PORTRAIT_HINT =
+  "Recommended: portrait orientation, at least 1000 × 1250 px. Accepted formats: JPG, PNG or WebP. Cropped to a 3:4 portrait shape.";
+
 export default function PagesManager() {
   const [pages, setPages] = useState([]);
   const [active, setActive] = useState(null);
@@ -60,7 +77,14 @@ export default function PagesManager() {
           {active && Object.keys(content).map((k) => (
             <Field key={k} label={fieldLabel(k)}>
               {k.endsWith("image") ? (
-                <ImageUploader testId={`page-${k}`} aspect={k === "intro_image" ? 4 / 5 : 16 / 9} value={content[k]} onChange={(url) => update(k, url)} />
+                <ImageUploader
+                  testId={`page-${k}`}
+                  aspect={k === "intro_image" ? 4 / 5 : 16 / 9}
+                  value={content[k]}
+                  onChange={(url) => update(k, url)}
+                  defaultUrl={IMAGE_DEFAULTS[active]?.[k] || ""}
+                  hint={k === "intro_image" ? PORTRAIT_HINT : HERO_HINT}
+                />
               ) : /body|benefits|hours|address|notes/.test(k) ? (
                 <textarea rows={3} className={adminInput} value={content[k]} onChange={(e) => update(k, e.target.value)} data-testid={`page-field-${k}`} />
               ) : (
