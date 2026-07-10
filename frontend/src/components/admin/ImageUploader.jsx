@@ -32,7 +32,7 @@ async function getCroppedBlob(imageSrc, cropPixels, outW, outH) {
   return new Promise((resolve) => canvas.toBlob((b) => resolve(b), "image/jpeg", 0.92));
 }
 
-export default function ImageUploader({ value, onChange, aspect = 3 / 4, label, testId = "image", defaultUrl = "", hint = "" }) {
+export default function ImageUploader({ value, onChange, aspect = 3 / 4, label, testId = "image", defaultUrl = "", hint = "", maxSize = 1280 }) {
   const MIN_ZOOM = 0.4;
   const MAX_ZOOM = 3;
   const [dragging, setDragging] = useState(false);
@@ -71,8 +71,8 @@ export default function ImageUploader({ value, onChange, aspect = 3 / 4, label, 
     if (!pixels) return;
     setUploading(true);
     try {
-      const outH = aspect < 1 ? 1200 : Math.round(1280 / aspect);
-      const outW = aspect < 1 ? Math.round(1200 * aspect) : 1280;
+      const outW = aspect < 1 ? Math.round(maxSize * aspect) : maxSize;
+      const outH = aspect < 1 ? maxSize : Math.round(maxSize / aspect);
       const blob = await getCroppedBlob(cropSrc, pixels, outW, outH);
       const file = new File([blob], `${testId}-${Date.now()}.jpg`, { type: "image/jpeg" });
       const fd = new FormData();

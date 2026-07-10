@@ -80,6 +80,7 @@ export default function PagesManager() {
                 <ImageUploader
                   testId={`page-${k}`}
                   aspect={k === "intro_image" ? 4 / 5 : 16 / 9}
+                  maxSize={k === "hero_image" ? 2560 : 1280}
                   value={content[k]}
                   onChange={(url) => update(k, url)}
                   defaultUrl={IMAGE_DEFAULTS[active]?.[k] || ""}
