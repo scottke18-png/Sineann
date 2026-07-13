@@ -2,11 +2,13 @@ import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 import { api } from "@/lib/api";
 import { Trash2, Mail, Check } from "lucide-react";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 const TYPE_LABEL = { purchase: "Purchase", wineclub: "Wine Club", visit: "Visit", general: "General" };
 
 export default function SubmissionsManager() {
   const [subs, setSubs] = useState([]);
+  const [toDelete, setToDelete] = useState(null);
 
   const load = useCallback(() => {
     api.get("/submissions").then((r) => setSubs(r.data)).catch(() => {});
@@ -15,10 +17,15 @@ export default function SubmissionsManager() {
 
   const markRead = async (s) => { await api.patch(`/submissions/${s.id}/read`); load(); };
   const remove = async (s) => {
-    if (!window.confirm("Delete this inquiry?")) return;
-    await api.delete(`/submissions/${s.id}`);
-    toast.success("Deleted.");
-    load();
+    try {
+      await api.delete(`/submissions/${s.id}`);
+      toast.success("Deleted.");
+      load();
+    } catch (err) {
+      toast.error("Delete failed.");
+    } finally {
+      setToDelete(null);
+    }
   };
 
   return (
@@ -37,7 +44,7 @@ export default function SubmissionsManager() {
               <div className="flex gap-2 shrink-0">
                 {!s.read && <button onClick={() => markRead(s)} className="text-[#A8A39D] hover:text-green-400 p-2" title="Mark read" data-testid={`sub-read-${s.id}`}><Check size={16} /></button>}
                 <a href={`mailto:${s.email}`} className="text-[#A8A39D] hover:text-[#F5F5F0] p-2" title="Reply"><Mail size={16} /></a>
-                <button onClick={() => remove(s)} className="text-[#A8A39D] hover:text-red-400 p-2" data-testid={`sub-delete-${s.id}`}><Trash2 size={16} /></button>
+                <button onClick={() => setToDelete(s)} className="text-[#A8A39D] hover:text-red-400 p-2" data-testid={`sub-delete-${s.id}`}><Trash2 size={16} /></button>
               </div>
             </div>
             {s.subject && <p className="text-secondary text-sm mb-1"><span className="overline">Subject:</span> {s.subject}</p>}
@@ -49,6 +56,15 @@ export default function SubmissionsManager() {
         ))}
         {subs.length === 0 && <p className="text-secondary">No inquiries yet.</p>}
       </div>
+
+      <ConfirmDialog
+        open={!!toDelete}
+        onOpenChange={(o) => !o && setToDelete(null)}
+        title="Delete inquiry?"
+        description={toDelete ? `The inquiry from ${toDelete.name} will be permanently removed.` : ""}
+        onConfirm={() => remove(toDelete)}
+        testId="delete-submission"
+      />
     </div>
   );
 }

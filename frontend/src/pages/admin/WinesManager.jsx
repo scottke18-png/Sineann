@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { adminInput, adminBtn, adminBtnGhost, Field } from "@/pages/admin/adminUi";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import ImageUploader from "@/components/admin/ImageUploader";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 const EMPTY = {
   name: "", vintage: "", varietal: "", appellation: "", vineyard: "",
@@ -18,6 +19,7 @@ export default function WinesManager() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
+  const [toDelete, setToDelete] = useState(null);
 
   const load = useCallback(() => {
     api.get("/wines").then((r) => setWines(r.data)).catch(() => {});
@@ -48,10 +50,15 @@ export default function WinesManager() {
   };
 
   const remove = async (w) => {
-    if (!window.confirm(`Delete "${w.name}"?`)) return;
-    await api.delete(`/wines/${w.id}`);
-    toast.success("Wine deleted.");
-    load();
+    try {
+      await api.delete(`/wines/${w.id}`);
+      toast.success("Wine deleted.");
+      load();
+    } catch (err) {
+      toast.error(formatApiErrorDetail(err.response?.data?.detail));
+    } finally {
+      setToDelete(null);
+    }
   };
 
   return (
@@ -72,7 +79,7 @@ export default function WinesManager() {
               <p className="text-secondary text-xs">{w.vintage} · {w.varietal} · {w.series} · {w.availability}</p>
             </div>
             <button onClick={() => openEdit(w)} className="text-[#A8A39D] hover:text-[#F5F5F0] p-2" data-testid={`edit-wine-${w.slug}`}><Pencil size={16} /></button>
-            <button onClick={() => remove(w)} className="text-[#A8A39D] hover:text-red-400 p-2" data-testid={`delete-wine-${w.slug}`}><Trash2 size={16} /></button>
+            <button onClick={() => setToDelete(w)} className="text-[#A8A39D] hover:text-red-400 p-2" data-testid={`delete-wine-${w.slug}`}><Trash2 size={16} /></button>
           </div>
         ))}
       </div>
@@ -123,6 +130,15 @@ export default function WinesManager() {
           </form>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!toDelete}
+        onOpenChange={(o) => !o && setToDelete(null)}
+        title="Delete wine?"
+        description={toDelete ? `"${toDelete.name}" will be permanently removed from the site.` : ""}
+        onConfirm={() => remove(toDelete)}
+        testId="delete-wine"
+      />
     </div>
   );
 }

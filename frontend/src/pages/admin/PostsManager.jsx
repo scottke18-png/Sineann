@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { adminInput, adminBtn, adminBtnGhost, Field } from "@/pages/admin/adminUi";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import ImageUploader from "@/components/admin/ImageUploader";
+import ConfirmDialog from "@/components/admin/ConfirmDialog";
 
 const EMPTY = { title: "", excerpt: "", body: "", cover_image: "", author: "Sineann", published: true };
 
@@ -14,6 +15,7 @@ export default function PostsManager() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
+  const [toDelete, setToDelete] = useState(null);
 
   const load = useCallback(() => {
     api.get("/posts", { params: { all: true } }).then((r) => setPosts(r.data)).catch(() => {});
@@ -39,10 +41,15 @@ export default function PostsManager() {
   };
 
   const remove = async (p) => {
-    if (!window.confirm(`Delete "${p.title}"?`)) return;
-    await api.delete(`/posts/${p.id}`);
-    toast.success("Post deleted.");
-    load();
+    try {
+      await api.delete(`/posts/${p.id}`);
+      toast.success("Post deleted.");
+      load();
+    } catch (err) {
+      toast.error(formatApiErrorDetail(err.response?.data?.detail));
+    } finally {
+      setToDelete(null);
+    }
   };
 
   return (
@@ -61,7 +68,7 @@ export default function PostsManager() {
               <p className="text-secondary text-xs">{new Date(p.published_at).toLocaleDateString()} · {p.author}</p>
             </div>
             <button onClick={() => openEdit(p)} className="text-[#A8A39D] hover:text-[#F5F5F0] p-2" data-testid={`edit-post-${p.slug}`}><Pencil size={16} /></button>
-            <button onClick={() => remove(p)} className="text-[#A8A39D] hover:text-red-400 p-2" data-testid={`delete-post-${p.slug}`}><Trash2 size={16} /></button>
+            <button onClick={() => setToDelete(p)} className="text-[#A8A39D] hover:text-red-400 p-2" data-testid={`delete-post-${p.slug}`}><Trash2 size={16} /></button>
           </div>
         ))}
       </div>
@@ -90,6 +97,15 @@ export default function PostsManager() {
           </form>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={!!toDelete}
+        onOpenChange={(o) => !o && setToDelete(null)}
+        title="Delete post?"
+        description={toDelete ? `"${toDelete.title}" will be permanently removed.` : ""}
+        onConfirm={() => remove(toDelete)}
+        testId="delete-post"
+      />
     </div>
   );
 }
